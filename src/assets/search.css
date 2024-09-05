@@ -1,0 +1,22 @@
+.search {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  margin-bottom: 30px; /* Adjust margin as needed */
+}
+
+.searchinput {
+  margin-right: 10px; /* Adjust spacing between search input and filters */
+  margin-bottom: -30px;
+  height: 40px;
+}
+
+.gender {
+ 
+  margin-left:10px;
+  background-origin: padding-box;
+}
+
+.hobbies {
+  margin-right: 600px; /* Adjust spacing between hobbies filter and any other content */
+}

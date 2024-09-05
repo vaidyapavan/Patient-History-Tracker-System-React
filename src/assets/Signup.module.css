@@ -1,0 +1,147 @@
+.container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color: #ced4da;
+  }
+  
+  .formContainer {
+    background-color: white;
+    padding: 2rem;
+    border-radius: 8px;
+    width: 500px;
+    height: 600px;
+  }
+  
+  .mb3 {
+    margin-bottom: 1.5rem;
+  }
+  
+  .inputGroup {
+    display: block;
+    margin-bottom: 1.5 rem; /* Increase this value to add more space between input boxes */
+    font-weight: bold;
+  }
+  
+  .inputGroup input {
+    width: 100%;
+    padding: 0.5rem;
+    border: 1px solid #ced4da;
+    border-radius: 4px;
+    font-size: 1rem;
+  }
+  
+
+  
+  .btnContainer {
+    display: flex;
+    justify-content: center;
+    margin-top: 1.5rem;
+  }
+  
+  .btn {
+    display: inline-block;
+    padding: 0.5rem 1rem;
+    font-size: 1rem;
+    font-weight: bold;
+    border-radius: 4px;
+    text-align: center;
+    cursor: pointer;
+    margin-right: 0.5rem;
+    transition: background-color 0.3s ease;
+  }
+  
+  .btnSuccess {
+    background-color: #28a745;
+    color: white;
+    border: none;
+  }
+  
+  .btnSuccess:hover {
+    background-color: #218838;
+  }
+  
+  .btnDefaultBorder {
+    background-color: white;
+    color: #6c757d;
+    border: 1px solid #6c757d;
+  }
+  
+ 
+  
+  
+  .custom-modal .success-message {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    
+  }
+  
+  .custom-modal .ok-button {
+    background-color:gray;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+.error {
+  color: red;
+  margin-top: 5px;
+  display: block;
+  
+  
+}
+
+
+
+
+.modalLabel {
+  font-size: 24px;
+  font-weight: bold;
+  color: #4CAF50; /* Green color */
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.successMessage {
+  font-size: 16px;
+  color: #333; /* Dark color */
+  margin-left: 10px;
+}
+
+.uniqueIdMessage {
+  font-size: 16px;
+  color: #333; /* Dark color */
+  margin-left: 10px;
+  font-weight: bold;
+}
+
+.btn {
+  font-size: 16px;
+  color: #fff; /* White text */
+  background-color: #4CAF50; /* Green background */
+  border: none;
+  border-radius: 5px;
+  padding: 10px 20px;
+  cursor: pointer;
+  display: block;
+  margin: 20px auto 0; /* Center the button horizontally */
+}
+
+.btn:hover {
+  background-color: #45a049; /* Darker green on hover */
+}
+
+
+
+/* Other styles */
+
+
+
+.redborder {
+  border: 1px solid red;
+}

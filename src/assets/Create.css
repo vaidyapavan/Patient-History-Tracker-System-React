@@ -1,0 +1,198 @@
+
+body{
+    background-color:rgb(246, 255, 196);
+}
+
+.create-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background-color:rgb(246, 255, 196);    
+   
+}
+
+.form-container {
+    background-color:rgb(179, 208, 245);
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    width: 550px;
+}
+
+
+
+
+.form-title {
+    margin-left: 10px;
+    text-align: center;
+    margin-bottom: 15px;
+    margin-right: 30px;
+    color: #333;
+}
+
+/* Form inputs */
+.form-control {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+    font-weight: 200px;
+}
+.form-label{
+    font-weight: 1200px;
+    font-size:larger;
+    color:black;
+}
+
+.form-select {
+    width: 100%;
+    padding: 8px;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    margin-bottom: 10px;
+}
+
+/* Combo box for Hobby */
+.combo-box {
+    position: relative;
+    width: 100%;
+    margin-bottom: 10px;
+}
+
+.combo-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.combo-input {
+    flex: 1;
+    border: none;
+    outline: none;
+    font-size: 16px;
+}
+
+.combo-icon {
+    font-size: 16px;
+}
+
+.combo-options {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-top: none;
+    border-radius: 0 0 4px 4px;
+    max-height: 150px;
+    overflow-y: auto;
+    z-index: 1000;
+}
+
+.combo-option {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+}
+
+.option-checkbox {
+    margin-right: 8px;
+}
+
+.option-label {
+    font-size: 20px;
+
+}
+.radio-container {
+    
+    gap:10px;
+}
+
+.form-check-label{
+    gap: 10px;
+    margin-left: 5px;
+    margin-top: 4px;
+  
+
+   
+}
+.btn btn-primary{
+    
+    margin-left: 150px;
+    background-color: aquamarine;
+}
+
+
+.custom-modal .modal-content {
+    background-color:aliceblue;
+    padding: 20px;
+    border-radius: 8px;
+    max-width: 500px;
+    margin: auto;
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    animation: slide-down 0.3s ease-out;
+}
+
+.custom-modal .success-message {
+    font-size: 1.2rem;
+    margin-bottom: 20px;
+    
+}
+
+.custom-modal .ok-button {
+    background-color:gray;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: background-color 0.3s ease;
+}
+
+
+
+.ok-button {
+    
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 1em;
+    width: 80px;
+    margin-left: 150px;
+}
+
+.ok-button:hover {
+    background-color:darkolivegreen;
+}
+
+
+
+
+.basic-multi-select {
+    width: 100%;
+}
+
+.select__control {
+    min-height: 38px;
+}
+
+.select__menu {
+    z-index: 100;
+}
+.btn btn-primary mb-3{
+    background-color: red;
+}
