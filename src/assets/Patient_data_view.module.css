@@ -1,0 +1,75 @@
+.container {
+  margin-top: 20px;
+margin-top: 50px;
+  background-color: #f2f2f2;
+
+}
+
+.profile {
+  text-align: center; /* Center align profile info */
+  margin-bottom: 20px; /* Space below profile info */
+
+}
+
+.profileInfo {
+  margin-bottom: 10px; /* Space below profile info */
+  margin-left: 1500px;
+}
+
+.patientName {
+  font-size: 24px; /* Adjust patient name font size */
+}
+
+.filterSection {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px; /* Space below filter section */
+}
+
+/* Patient_data_view.module.css */
+
+.table {
+  width: 100%;
+  margin-top: 20px;
+}
+
+.table th,
+.table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Zebra striping */
+}
+
+.profile {
+  text-align: center; /* Center align profile info */
+  margin-bottom: 20px; /* Space below profile info */
+}
+
+.profileInfo {
+  margin-bottom: 10px; /* Space below profile info */
+}
+
+.patientName {
+  font-size: 24px; /* Adjust patient name font size */
+}
+
+.filterSection {
+  display: flex;
+  justify-content: flex-start;
+  margin-bottom: 20px; /* Space below filter section */
+}
+
+.modalHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: #f1f1f1;
+  padding: 10px;
+}
+
+.modalBody {
+  padding: 10px;
+}

@@ -4,7 +4,7 @@ import { Modal } from '@fluentui/react/lib/Modal';
 import { SearchBox } from '@fluentui/react/lib/SearchBox';
 import CloseIcon from '@mui/icons-material/Close';
 import Navbar from './Navbar';
-import '../assets/Patient_data_view.css';
+import styles from '../assets/Patient_data_view.module.css'; // Import styles
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { format } from 'date-fns'; // For date formatting
 
@@ -32,7 +32,6 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
       setMessage('Error fetching patient data');
     }
   };
-  
 
   // Fetch data when the patientName changes
   useEffect(() => {
@@ -51,7 +50,7 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
   return (
     <>
       <Navbar />
-      <div className="container mt-3">
+      <div className={styles.container}>
         <button
           className="btn btn-primary mb-3"
           style={{ marginLeft: '5px' }}
@@ -59,15 +58,18 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
         >
           Go to Homepage
         </button>
+        <br></br>
+        <h2 style={{marginLeft:"700px"}}>My Medical History</h2>
 
-        <div className="profile">
-          <div className="profile-info">
+        <div className={styles.profile}>
+          <div className={styles.profileInfo}>
+           
             <AccountBoxIcon style={{ fontSize: '100px' }} />
-            <h5 className="patient-name">{patientName}</h5>
+            <h5 className={styles.patientName}>{patientName}</h5>
           </div>
-        </div>
+        </div>  
 
-        <div className="filter-section mb-3" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+        <div className={styles.filterSection}>
           <SearchBox
             placeholder="Search by Doctor Name"
             value={searchTermDoctor}
@@ -83,40 +85,40 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
         </div>
 
         {filteredData.length > 0 ? (
-          <table className="table table-bordered">
-            <thead>
-              <tr>
-                <th>Date</th>
-                <th>Doctor Name</th>
-                <th>Medical Condition</th>
-                <th>Description</th>
-              </tr>
-            </thead>
-            <tbody>
-              {filteredData.map((item) => (
-                <tr key={item.id}>
-                  {/* Format the date field if it exists */}
-                  <td>{item.date ? format(new Date(item.date), 'dd/MM/yyyy') : 'No Date Available'}</td>
-                  <td>{item.doctor_name}</td>
-                  <td>{item.medical ? item.medical : 'No Medical Data Available'}</td>
+  <table className={`table table-bordered ${styles.table}`}>
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Doctor Name</th>
+        <th>Medical Condition</th>
+        <th>Description</th>
+      </tr>
+    </thead>
+    <tbody>
+      {filteredData.map((item) => (
+        <tr key={item.id}>
+          {/* Format the patient_date field in DD-MM-YY format */}
+          <td>{item.patient_date ? format(new Date(item.patient_date), 'dd-MM-yy') : 'No Date Available'}</td>
+          <td>{item.doctor_name}</td>
+          <td>{item.medical ? item.medical : 'No Medical Data Available'}</td>
+          <td>{item.description}</td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+) : (
+  <p>{message || 'No patient data available'}</p>
+)}
 
-                  <td>{item.description}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        ) : (
-          <p>{message || 'No patient data available'}</p>
-        )}
       </div>
 
       {/* Modal for delete confirmation */}
       <Modal isOpen={isDeleteConfirmModal} onDismiss={() => setIsDeleteConfirmModal(false)}>
-        <div className="modal-header">
+        <div className={styles.modalHeader}>
           <CloseIcon onClick={() => setIsDeleteConfirmModal(false)} />
           <h5>Confirm Deletion</h5>
         </div>
-        <div className="modal-body">
+        <div className={styles.modalBody}>
           <p>Are you sure you want to delete this record?</p>
           <button className="btn btn-danger" onClick={() => { /* Handle delete confirmation */ }}>
             Yes, Delete

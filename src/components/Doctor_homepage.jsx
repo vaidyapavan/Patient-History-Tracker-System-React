@@ -11,7 +11,7 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
-import '../assets/Doctor_homepage.css';
+import styles from '../assets/Doctor_homepage.module.css';
 
 const Doctor_homepage = ({ handlePageChange, doctorName }) => {
   const [data, setData] = useState([]);
@@ -34,9 +34,9 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
       const response = await axios.get('http://localhost:8086/patientDataForDoctor');
       const formattedData = response.data.map(item => ({
         ...item,
-        medical: item.medical || 'No Medical Data Available', // Handle medical data
+        medical: item.medical || 'No Medical Data Available',
       }));
-      setData(formattedData); // Update state with fetched data
+      setData(formattedData);
       console.log('Data fetched successfully:', formattedData);
     } catch (error) {
       console.error('Error fetching data:', error);
@@ -44,13 +44,21 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
   };
 
   const sortData = (key) => {
-    const sortedData = [...data].sort((a, b) => {
-      if (sortOrder[key] === 'asc') {
-        return key === 'date' ? new Date(a[key]) - new Date(b[key]) : (a[key] || '').localeCompare(b[key] || '');
-      } else {
-        return key === 'date' ? new Date(b[key]) - new Date(a[key]) : (b[key] || '').localeCompare(a[key] || '');
+    const sortedData = [...filteredData].sort((a, b) => {
+      let comparison = 0;
+
+      // Handling different types of sorting
+      if (key === 'date') {
+        comparison = new Date(a.patient_date) - new Date(b.patient_date);
+      } else if (key === 'name') {
+        comparison = (a.patient_name || '').localeCompare(b.patient_name || '');
+      } else if (key === 'age') {
+        comparison = (a.age || 0) - (b.age || 0); // Assuming age is a number
       }
+
+      return sortOrder[key] === 'asc' ? comparison : -comparison; // Ascending or descending
     });
+
     setData(sortedData);
     setSortOrder({ ...sortOrder, [key]: sortOrder[key] === 'asc' ? 'desc' : 'asc' });
   };
@@ -60,7 +68,7 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
       await axios.delete(`http://localhost:8086/deleteData/${id}`);
       console.log('Item deleted successfully');
       getData(); // Refresh data after deletion
-      setIsDeleteConfirmModal(false); // Close delete confirmation modal
+      setIsDeleteConfirmModal(false);
     } catch (error) {
       console.error('Error deleting item:', error);
     }
@@ -68,18 +76,18 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
 
   const confirmDelete = (id) => {
     setDeleteId(id);
-    setIsDeleteConfirmModal(true); // Show delete confirmation modal
+    setIsDeleteConfirmModal(true);
   };
 
   const handleDeleteConfirmation = () => {
     if (deleteId !== null) {
       handleDelete(deleteId);
-      setDeleteId(null); // Clear deleteId after successful deletion
+      setDeleteId(null);
     }
   };
 
   const cancelDeleteConfirmation = () => {
-    setIsDeleteConfirmModal(false); // Close delete confirmation modal
+    setIsDeleteConfirmModal(false);
     setDeleteId(null);
   };
 
@@ -101,12 +109,8 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
     setMedicalTerm(e.target.value);
   };
 
-  const capitalizeFirstLetter = (string) => {
-    return (string || '').charAt(0).toUpperCase() + (string || '').slice(1).toLowerCase();
-  };
-
   const filteredData = data.filter((item) => {
-    const matchesName = (item.name || '').toLowerCase().includes(searchTerm.toLowerCase());
+    const matchesName = (item.patient_name || '').toLowerCase().includes(searchTerm.toLowerCase());
     const matchesGender = genderTerm === '' || (item.gender || '').toLowerCase() === genderTerm.toLowerCase();
     const matchesMedical = medicalTerm === '' || (item.medical || '').toLowerCase().includes(medicalTerm.toLowerCase());
     return matchesName && matchesGender && matchesMedical;
@@ -130,121 +134,113 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
 
   const goToUpdate = (item) => {
     localStorage.setItem('ID', item.id);
-    localStorage.setItem('Name', item.name);
-    localStorage.setItem('Email', item.email);
-    localStorage.setItem('Date', item.date);
+    localStorage.setItem('Name', item.patient_name);
+    localStorage.setItem('Email', item.patient_email);
+    localStorage.setItem('Date', item.patient_date);
     localStorage.setItem('Age', item.age);
     localStorage.setItem('Gender', item.gender);
-    localStorage.setItem('Medical', item.medical); // Store medical as needed
+    localStorage.setItem('Medical', item.medical);
     localStorage.setItem('Description', item.description);
     handlePageChange('Update');
   };
 
+  const formatDate = (dateString) => {
+    const date = new Date(dateString);
+    const day = String(date.getDate()).padStart(2, '0');
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const year = date.getFullYear();
+    return `${day}-${month}-${year}`;
+  };
+
   return (
-    <div className="container mt-3">
-      <div className='profile'>
-        <button className="btn btn-primary mb-3" title="Go-to homepage" style={{marginLeft:"-1200px"}} onClick={goToHomepage}>
+    <div className={styles.container}>
+      <div className={styles.profile}>
+        <button className="btn btn-primary mb-3" title="Go-to homepage" onClick={goToHomepage}>
           <ArrowBackIosIcon />
           Homepage
         </button>
-        <h3 className="form-title">My Patient History</h3>
-        <AccountBoxIcon style={{fontSize: "100px", marginRight:"1000px"}} />
+        <h3>My Patient History</h3>
+        <AccountBoxIcon style={{ fontSize: "100px" }} />
       </div>
-      <h2 style={{marginLeft:"1400px"}}>{doctorName}</h2>
+      <h2 style={{ marginLeft: "1600px" }}>{doctorName}</h2>
 
       <div>
-        <div className='search-add-button'>
-          <div className='search'>
-            <div className='searchinput'>
-              <input
-                type='text'
-                placeholder='Search by Patient Name'
-                value={searchTerm}
-                onChange={handleChange}
-              />
-              {searchTerm ? (
-                <CloseIcon onClick={handleClear} style={{ cursor: 'pointer' }} />
-              ) : (
-                <SearchIcon />
-              )}
-            </div>
-            <div className='gender'>
-              <label><h6>Gender:</h6></label>
-              <select value={genderTerm} onChange={genderChange}>
-                <option value="">All</option>
-                <option value="male">Male</option>
-                <option value="female">Female</option>
-              </select>
-            </div>
-            <div className='medical'>
-              <label><h6>Medical Condition:</h6></label>
-              <input
-                type='text'
-                placeholder='Search by Medical Condition'
-                value={medicalTerm}
-                onChange={handleMedicalChange}
-              />
-            </div>
+        <div className={styles.search}>
+          <div className={styles.searchinput}>
+            <input
+              type='text'
+              placeholder='Search by Patient Name'
+              value={searchTerm}
+              onChange={handleChange}
+            />
+            {searchTerm ? (
+              <CloseIcon onClick={handleClear} style={{ cursor: 'pointer' }} />
+            ) : (
+              <SearchIcon />
+            )}
           </div>
-
+          <div className={styles.gender}>
+            <label><h6>Gender:</h6></label>
+            <select value={genderTerm} onChange={genderChange}>
+              <option value="">All</option>
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+            </select>
+          </div>
+          <div className={styles.medical}>
+            <label><h6>Medical Condition:</h6></label>
+            <input
+              type='text'
+              placeholder='Search by Medical Condition'
+              value={medicalTerm}
+              onChange={handleMedicalChange}
+            />
+          </div>
           <button className="btn btn-primary mb-3 add-button" onClick={addPatient}>
             <AddIcon />
             Add New Patient
           </button>
         </div>
 
-        <table className="table table-striped">
+        {message && <p>{message}</p>}
+
+        <table className={styles.table}>
           <thead>
             <tr>
-              <th scope="col" onClick={() => sortData('name')}>Name {sortOrder.name === 'asc' ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}</th>
-              <th scope="col" onClick={() => sortData('age')}>Age {sortOrder.age === 'asc' ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}</th>
-              <th scope="col" onClick={() => sortData('gender')}>Gender</th>
-              <th scope="col" onClick={() => sortData('medical')}>Medical Condition</th>
-              <th scope="col" onClick={() => sortData('date')}>Date {sortOrder.date === 'asc' ? <ArrowDropDownIcon /> : <ArrowDropUpIcon />}</th>
-              <th scope="col">Actions</th>
+              <th onClick={() => sortData('date')}>Date {sortOrder.date === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+              <th onClick={() => sortData('name')}>Name {sortOrder.name === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+              <th onClick={() => sortData('age')}>Age {sortOrder.age === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+              <th>Gender</th>
+              <th>Medical Condition</th>
+              <th>Description</th>
+              <th>Actions</th>
             </tr>
           </thead>
           <tbody>
-  {filteredData.length === 0 ? (
-    <tr>
-      <td colSpan="7">
-        <div style={{ textAlign: 'center', fontSize: '20px', fontWeight: 'bold', paddingTop: '20px' }}>{message}</div>
-      </td>
-    </tr>
-  ) : (
-    filteredData.map((item) => (
-      <tr key={item.id}>
-        <td>{item.name ? capitalizeFirstLetter(item.name) : 'No Name Available'}</td>
-        <td>{item.age}</td>
-        <td>{capitalizeFirstLetter(item.gender)}</td>
-        <td>{item.medical}</td>
-        <td>{new Date(item.date).toLocaleDateString()}</td>
-        <td>
-          <EditButtonWithTooltip onClick={() => goToUpdate(item)} />
-          <DeleteButtonWithTooltip onClick={() => confirmDelete(item.id)} />
-        </td>
-      </tr>
-    ))
-  )}
-</tbody>
-
+            {filteredData.map((item, index) => (
+              <tr key={index}>
+                <td>{formatDate(item.patient_date)}</td>
+                <td>{item.patient_name}</td>
+                <td>{item.age}</td>
+                <td>{item.gender}</td>
+                <td>{item.medical}</td>
+                <td>{item.description}</td>
+                <td>
+                  <EditButtonWithTooltip onClick={() => goToUpdate(item)} />
+                  <DeleteButtonWithTooltip onClick={() => confirmDelete(item.id)} />
+                </td>
+              </tr>
+            ))}
+          </tbody>
         </table>
       </div>
 
-      <Modal
-        isOpen={isDeleteConfirmModal}
-        onDismiss={cancelDeleteConfirmation}
-      >
-        <div className="modal-content">
-          <CloseIcon className="modal-close" onClick={cancelDeleteConfirmation} />
-          <h2>Confirm Delete</h2>
-          <p>Are you sure you want to delete this patient record?</p>
-          <button className="btn btn-danger" onClick={handleDeleteConfirmation}>
-            Yes, Delete
-          </button>
-          <button className="btn btn-secondary" onClick={cancelDeleteConfirmation}>
-            Cancel
-          </button>
+      {/* Modal for delete confirmation */}
+      <Modal isOpen={isDeleteConfirmModal} onDismiss={cancelDeleteConfirmation}>
+        <div className={styles.modalContent}>
+          <h3>Are you sure you want to delete this item?</h3>
+          <button onClick={handleDeleteConfirmation}>Yes</button>
+          <button onClick={cancelDeleteConfirmation}>No</button>
         </div>
       </Modal>
     </div>

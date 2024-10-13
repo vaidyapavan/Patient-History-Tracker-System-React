@@ -1,0 +1,64 @@
+.container {
+  margin: 20px;
+  background-color: #f2f2f2;
+  
+}
+
+.profile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.form-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.search-add-button {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.search {
+  display: flex;
+  align-items: center;
+}
+
+.searchinput input {
+  padding: 8px;
+  margin-right: 10px;
+}
+
+.gender, .medical {
+  margin-right: 20px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.table th, .table td {
+  padding: 10px;
+  text-align: left;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2; /* Zebra striping */
+}
+
+.modal-content {
+  padding: 20px;
+}
+
+.modal-close {
+  cursor: pointer;
+  float: right;
+}
+
+.btn {
+  margin: 5px;
+}
