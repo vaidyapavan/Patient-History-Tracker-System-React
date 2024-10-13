@@ -14,7 +14,7 @@ import Access from './components/Access';
 
 function App() {
   const [pageName, setPageName] = useState('');
-  const [email, setEmail] = useState('');  // Add email state here
+  const [email, setEmail] = useState('');  
   const [patientName, setPatientName] = useState('');
   const [doctorName, setDoctorName] = useState('');
 

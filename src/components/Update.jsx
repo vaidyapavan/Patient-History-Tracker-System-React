@@ -116,7 +116,7 @@ const Update = ({ handlePageChange }) => {
         }
 
         const capitalizedGender = capitalizeFirstLetter(gender);
-        axios.put(`http://localhost:8085/update/${id}`, {
+        axios.put(`http://localhost:8086/update/${id}`, {
             patientName,
             patientEmail,
             patientDate,

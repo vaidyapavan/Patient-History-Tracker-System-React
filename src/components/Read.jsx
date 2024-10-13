@@ -30,7 +30,7 @@ const Read = ({handlePageChange} ) => {
 
   const getData = async () => {
     try {
-      const response = await axios.get('http://localhost:8085/getData'); 
+      const response = await axios.get('http://localhost:8086/getData'); 
       setData(response.data); // Update state with fetched data
       console.log('Data fetched successfully:', response.data); // Log fetched data to console
     } catch (error) {
@@ -65,7 +65,7 @@ const Read = ({handlePageChange} ) => {
   // Function to handle delete operation
   const handleDelete = (id) => {
     axios
-      .delete(`http://localhost:8085/deleteData/${id}`)
+      .delete(`http://localhost:8086/deleteData/${id}`)
       .then(() => {
         console.log('Item deleted successfully');
         getData(); // Refresh data after deletion

@@ -1,132 +1,46 @@
-
-
-
-.container mt-3
-{
-  width: 100px;
-}
-.styled-table {
-  width: 100%;
-  border-collapse: collapse;
- 
-}
-
-.styled-table th,
-.styled-table td {
-  padding: 12px;
-  text-align: left;
-  border-bottom: 1px solid #ddd;
-}
-.profile
-{
+.container {
   display: flex;
-  margin-top: 30px;
-  margin-left: 100px;
-  
-
+  flex-direction: column;
+  align-items: flex-start;
 }
 
-.styled-table th {
-  background-color: #f4f4f4;
-  color: #333;
+.profile {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  margin-left: 1200px;
+  margin-top: -10px;
 }
 
-.styled-table tbody tr:nth-child(even) {
-  background-color: #f9f9f9;
+.profile-info {
+  display: flex;
+  align-items: center;
 }
 
-.styled-table tbody tr:hover {
-  background-color: #f1f1f1;
+.patient-name {
+  margin-left: 15px;
+  font-size: 24px;
+  font-weight: bold;
 }
 
-.modal-content {
-  padding: 20px;
-  text-align: center;
+.filter-section {
+  margin-bottom: 20px;
+  width: 100%;
 }
 
-.modal-actions {
+.table {
+  width: 100%;
   margin-top: 20px;
 }
 
-.modal-actions button {
-  margin: 0 10px;
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
-.modal-close-icon {
-  cursor: pointer;
-  position: absolute;
-  top: 10px;
-  right: 10px;
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
 }
-
-
-
-  /* Modal styles */
-  .delete-confirmation-modal {
-    width: 400px;
-    margin: 0 auto;
-  }
-  
-  .modal-content {
-    padding: 20px;
-  }
-  
-  .modal-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-
-  .form-title
-  {
-    margin-top:80px;
-    /* margin-left: 400px; */
-    align-items: center;
-
-  }
-  
-  .modal-title {
-    margin: 0;
-  }
-  
-  .close {
-    background: none;
-    border: none;
-  }
-  
-  .modal-footer {
-    display: flex;
-    justify-content: flex-end;
-  }
-  
-  .btn-secondary {
-    margin-right: 10px;
-  }
-  
-  /* Search and filter styles */
-  .search {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 10px;
-  }
-  
-  .searchinput {
-    display: flex;
-    align-items: center;
-    margin-bottom: 5px;
-    margin-top: 25px;
-  }
-  
-  .searchinput input {
-    padding: 5px;
-    margin-right: 5px;
-  }
-  
-  .gender, .hobbies {
-    margin-left: 20px;
-  }
-  
-  .gender select, .hobbies .ms-Dropdown {
-    width: 200px;
-  }
-  

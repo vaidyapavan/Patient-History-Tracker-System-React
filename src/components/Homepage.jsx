@@ -21,7 +21,7 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
       userId: patientUniqueId
     };
 
-    axios.post('http://localhost:8085/verify', values)
+    axios.post('http://localhost:8086/verify', values)
       .then(res => {
         if (res.data === "Success") {
           setPatientName(patientName); // Set the patient name in the parent component
@@ -42,8 +42,8 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
       userId: doctorUniqueId
     };
 
-    axios.post('http://localhost:8085/verify_Doctor', values)
-      .then(res => {
+    axios.post('http://localhost:8086/verify_Doctor', values)
+    .then(res => {
         if (res.data === "Success") {
           setDoctorName(doctorName);
           handlePageChange('Doctor_homepage');
@@ -90,9 +90,9 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
             <div className="navbar-item">Contact</div>
 
             <div>
-              <AccountBoxIcon style={{ marginLeft: "180px", fontSize: "70px" }} />
+              <AccountBoxIcon style={{ marginLeft: "20px", fontSize: "70px" }} />
 
-              <h4 style={{ marginLeft: "120px", marginTop: "10px" }}>{email}</h4>
+              <h4 style={{ marginLeft: "-20px", marginTop: "10px" }}>{email}</h4>
             </div>
           </div>
         </div>

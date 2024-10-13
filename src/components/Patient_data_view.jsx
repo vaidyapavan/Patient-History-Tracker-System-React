@@ -1,14 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Modal } from '@fluentui/react/lib/Modal';
+import { SearchBox } from '@fluentui/react/lib/SearchBox';
 import CloseIcon from '@mui/icons-material/Close';
-import SearchIcon from '@mui/icons-material/Search';
-import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
-import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
-import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import Navbar from './Navbar';
 import '../assets/Patient_data_view.css';
+import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import { format } from 'date-fns'; // For date formatting
 
 const Patient_data_view = ({ handlePageChange, patientName }) => {
   const [data, setData] = useState([]);
@@ -17,243 +15,115 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
   const [message, setMessage] = useState('');
   const [isDeleteConfirmModal, setIsDeleteConfirmModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
-  const [sortOrder, setSortOrder] = useState({ date: 'asc', name: 'asc' });
 
-  useEffect(() => {
-    getData(); // Fetch data when component mounts
-  }, []);
-
-  const getData = async () => {
+  // Fetch patient data by name
+  const fetchPatientDataByName = async () => {
     try {
-      const response = await axios.get('http://localhost:8085/getData');
-      setData(response.data); // Update state with fetched data
-      console.log('Data fetched successfully:', response.data);
-    } catch (error) {
-      console.error('Error fetching data:', error); // Log error if data fetch fails
-    }
-  };
-
-  const sortData = (key) => {
-    const sortedData = [...data].sort((a, b) => {
-      if (sortOrder[key] === 'asc') {
-        return a[key].localeCompare(b[key]);
+      const response = await axios.get(`http://localhost:8086/getPatientData/${patientName}`);
+      console.log('Patient data:', response.data); // Log the response to check for 'medical'
+      if (response.status === 200) {
+        setData(response.data); // Set the fetched data to state
+        setMessage('');
       } else {
-        return b[key].localeCompare(a[key]);
+        setMessage('Patient not found');
       }
-    });
-    setData(sortedData);
-    setSortOrder({ ...sortOrder, [key]: sortOrder[key] === 'asc' ? 'desc' : 'asc' });
-  };
-
-  const handleDelete = (id) => {
-    axios
-      .delete(`http://localhost:8085/deleteData/${id}`)
-      .then(() => {
-        console.log('Item deleted successfully');
-        getData(); // Refresh data after deletion
-        setIsDeleteConfirmModal(false); // Close delete confirmation modal
-      })
-      .catch((error) => {
-        console.error('Error deleting item:', error); // Log error if deletion fails
-      });
-  };
-
-  const setToLocalStorageAndNavigate = (id, name, email, age, doctorName, date, medical, description, critical) => {
-    localStorage.setItem('ID', id);
-    localStorage.setItem('Name', name);
-    localStorage.setItem('Email', email);
-    localStorage.setItem('Age', age);
-    localStorage.setItem('DoctorName', doctorName);
-    localStorage.setItem('Date', date);
-    localStorage.setItem('Medical', medical);
-    localStorage.setItem('Description', description);
-    localStorage.setItem('Critical', critical);
-
-    handlePageChange('Update');
-  };
-
-  const confirmDelete = (id) => {
-    setDeleteId(id);
-    setIsDeleteConfirmModal(true); // Show delete confirmation modal
-  };
-
-  const handleDeleteConfirmation = () => {
-    if (deleteId !== null) {
-      handleDelete(deleteId);
+    } catch (error) {
+      console.error('Error fetching patient data:', error);
+      setMessage('Error fetching patient data');
     }
   };
+  
 
-  const cancelDeleteConfirmation = () => {
-    setIsDeleteConfirmModal(false); // Close delete confirmation modal
-    setDeleteId(null);
-    handlePageChange('Read');
-  };
-
-  const handleChangeDoctor = (e) => {
-    setSearchTermDoctor(e.target.value);
-    setMessage('');
-  };
-
-  const handleChangeMedical = (e) => {
-    setSearchTermMedical(e.target.value);
-    setMessage('');
-  };
-
-  const handleClearDoctor = () => {
-    setSearchTermDoctor('');
-    setMessage('');
-  };
-
-  const handleClearMedical = () => {
-    setSearchTermMedical('');
-    setMessage('');
-  };
-
-  const filteredData = data.filter((item) => {
-    const doctorName = item.doctor_name || ''; // Ensure item.doctor_name is defined
-    const medical = item.medical || ''; // Ensure item.medical is defined
-
-
-    const medicalString = Array.isArray(medical) ? medical.join(', ') : medical;
-
-    const matchesDoctorName = doctorName.toLowerCase().includes(searchTermDoctor.toLowerCase());
-    const matchesMedical = medicalString.toLowerCase().includes(searchTermMedical.toLowerCase());
-
-    return matchesDoctorName && matchesMedical;
-  });
-
+  // Fetch data when the patientName changes
   useEffect(() => {
-    if ((searchTermDoctor || searchTermMedical) && filteredData.length === 0) {
-      setMessage('No data found');
-    } else {
-      setMessage('');
+    if (patientName) {
+      fetchPatientDataByName();
     }
-  }, [searchTermDoctor, searchTermMedical, filteredData]);
+  }, [patientName]);
 
-  const addStudent = () => {
-    handlePageChange('Create');
-  };
-
-  const goToHomepage = () => {
-    handlePageChange('Homepage');
-  };
+  // Filter the data based on search terms
+  const filteredData = data.filter(
+    (item) =>
+      (!searchTermDoctor || item.doctor_name.toLowerCase().includes(searchTermDoctor.toLowerCase())) &&
+      (!searchTermMedical || item.medical.toLowerCase().includes(searchTermMedical.toLowerCase()))
+  );
 
   return (
     <>
-      <Navbar></Navbar>
+      <Navbar />
       <div className="container mt-3">
+        <button
+          className="btn btn-primary mb-3"
+          style={{ marginLeft: '5px' }}
+          onClick={() => handlePageChange('Homepage')}
+        >
+          Go to Homepage
+        </button>
 
-
-        <div className='profile'>
-          <button
-            className="btn btn-primary mb-3"
-            title="Go-to Homepage"
-            style={{ marginLeft: '5px' }}
-            onClick={goToHomepage}
-          >
-            <ArrowBackIosIcon />
-            Homepage
-          </button>
-          <h2 className="form-title">My Medical Data</h2>
-          <AccountBoxIcon style={{ marginLeft: '1000px', fontSize: '100px' }} />
-          <h2 style={{ marginLeft: '-100px', marginTop: "40px" }}>{patientName}</h2>
-
-        </div>
-
-
-        <div>
-
-          <div className="search">
-            <div className="searchinput">
-              <input
-                type="text"
-                placeholder="Search by Doctor Name"
-                value={searchTermDoctor}
-                onChange={handleChangeDoctor}
-              />
-              {searchTermDoctor ? (
-                <CloseIcon onClick={handleClearDoctor} style={{ cursor: 'pointer' }} />
-              ) : (
-                <SearchIcon />
-              )}
-            </div>
-            <div className="searchinput" style={{ marginLeft: '10px' }}>
-              <input
-                type="text"
-                placeholder="Search by Medical"
-                value={searchTermMedical}
-                onChange={handleChangeMedical}
-              />
-              {searchTermMedical ? (
-                <CloseIcon onClick={handleClearMedical} style={{ cursor: 'pointer' }} />
-              ) : (
-                <SearchIcon />
-              )}
-            </div>
+        <div className="profile">
+          <div className="profile-info">
+            <AccountBoxIcon style={{ fontSize: '100px' }} />
+            <h5 className="patient-name">{patientName}</h5>
           </div>
         </div>
 
-        <table className="styled-table">
-          <thead>
-            <tr>
-              <th scope="col" style={{ textAlign: 'center', width: '20%' }}>
-                Date
-                {sortOrder.date === 'asc' ? (
-                  <ArrowDropDownIcon onClick={() => sortData('date')} style={{ cursor: 'pointer' }} />
-                ) : (
-                  <ArrowDropUpIcon onClick={() => sortData('date')} style={{ cursor: 'pointer' }} />
-                )}
-              </th>
-              <th scope="col" style={{ textAlign: 'center', width: '20%' }}>
-                Doctor Name
-                {sortOrder.name === 'asc' ? (
-                  <ArrowDropDownIcon onClick={() => sortData('doctor_name')} style={{ cursor: 'pointer' }} />
-                ) : (
-                  <ArrowDropUpIcon onClick={() => sortData('doctor_name')} style={{ cursor: 'pointer' }} />
-                )}
-              </th>
-              <th scope="col" style={{ textAlign: 'center', width: '30%' }}>
-                Given Medical
-              </th>
-              <th scope="col" style={{ textAlign: 'center', width: '30%' }}>
-                Description
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.length === 0 ? (
+        <div className="filter-section mb-3" style={{ display: 'flex', justifyContent: 'flex-start' }}>
+          <SearchBox
+            placeholder="Search by Doctor Name"
+            value={searchTermDoctor}
+            onChange={(e, newValue) => setSearchTermDoctor(newValue)}
+            styles={{ root: { width: 250, marginRight: 10 } }}
+          />
+          <SearchBox
+            placeholder="Search by Medical Condition"
+            value={searchTermMedical}
+            onChange={(e, newValue) => setSearchTermMedical(newValue)}
+            styles={{ root: { width: 250 } }}
+          />
+        </div>
+
+        {filteredData.length > 0 ? (
+          <table className="table table-bordered">
+            <thead>
               <tr>
-                <td colSpan="4" style={{ textAlign: 'center' }}>
-                  {message}
-                </td>
+                <th>Date</th>
+                <th>Doctor Name</th>
+                <th>Medical Condition</th>
+                <th>Description</th>
               </tr>
-            ) : (
-              filteredData.map((item) => (
+            </thead>
+            <tbody>
+              {filteredData.map((item) => (
                 <tr key={item.id}>
-                  <td>{item.patient_date}</td>
+                  {/* Format the date field if it exists */}
+                  <td>{item.date ? format(new Date(item.date), 'dd/MM/yyyy') : 'No Date Available'}</td>
                   <td>{item.doctor_name}</td>
-                  <td>{Array.isArray(item.medical) ? item.medical.join(', ') : item.medical}</td>
+                  <td>{item.medical ? item.medical : 'No Medical Data Available'}</td>
+
                   <td>{item.description}</td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ))}
+            </tbody>
+          </table>
+        ) : (
+          <p>{message || 'No patient data available'}</p>
+        )}
       </div>
 
-      <Modal isOpen={isDeleteConfirmModal} onDismiss={cancelDeleteConfirmation} isBlocking={false}>
-        <div className="modal-content">
-          <h3>Confirm Delete</h3>
+      {/* Modal for delete confirmation */}
+      <Modal isOpen={isDeleteConfirmModal} onDismiss={() => setIsDeleteConfirmModal(false)}>
+        <div className="modal-header">
+          <CloseIcon onClick={() => setIsDeleteConfirmModal(false)} />
+          <h5>Confirm Deletion</h5>
+        </div>
+        <div className="modal-body">
           <p>Are you sure you want to delete this record?</p>
-          <div className="modal-actions">
-            <button className="btn btn-primary" onClick={handleDeleteConfirmation}>
-              Yes
-            </button>
-            <button className="btn btn-secondary" onClick={cancelDeleteConfirmation}>
-              No
-            </button>
-          </div>
-          <CloseIcon className="modal-close-icon" onClick={cancelDeleteConfirmation} />
+          <button className="btn btn-danger" onClick={() => { /* Handle delete confirmation */ }}>
+            Yes, Delete
+          </button>
+          <button className="btn btn-secondary" onClick={() => setIsDeleteConfirmModal(false)}>
+            Cancel
+          </button>
         </div>
       </Modal>
     </>

@@ -7,6 +7,7 @@ import { MessageBar, MessageBarType } from '@fluentui/react';
 import { v4 as uuidv4 } from 'uuid'; // Import the UUID library
 import CloseIcon from '@mui/icons-material/Close';
 
+
 const Signup = ({ handlePageChange }) => {
   const [values, setValues] = useState({
     name: '',
@@ -87,11 +88,11 @@ const Signup = ({ handlePageChange }) => {
     if (validate()) {
       const userId = uuidv4(); // Generate a unique ID
       const userData = { ...values, userId }; // Include the ID in the data
-
-      axios.post('http://localhost:8085/signup', userData)
+  
+      axios.post('http://localhost:8086/signup', userData)
         .then(res => {
           setUserId(userId); // Store the generated user ID in the state
-          setIsModalOpen(true);
+          setIsModalOpen(true); // Show success modal
         })
         .catch(err => {
           console.error('Error creating account:', err);
@@ -99,7 +100,7 @@ const Signup = ({ handlePageChange }) => {
         });
     }
   };
-
+  
   const closeModal = () => {
     setIsModalOpen(false);
     handlePageChange('Login');
@@ -108,15 +109,15 @@ const Signup = ({ handlePageChange }) => {
   const goToSignInPage = () => {
     handlePageChange('Login');
   };
-  const gotoaccesspage =()=>
-    {
-      handlePageChange('');
-    }
+
+  const gotoaccesspage = () => {
+    handlePageChange('');
+  }
 
   return (
     <div className={styles.container}>
       <div className={styles.formContainer}>
-      <CloseIcon style={{marginLeft:"430px", marginTop:"-40px",cursor:"pointer"}} onClick={gotoaccesspage}></CloseIcon>
+        <CloseIcon style={{ marginLeft: "430px", marginTop: "-40px", cursor: "pointer" }} onClick={gotoaccesspage}></CloseIcon>
         <h2 style={{ marginLeft: "140px" }}>Sign Up</h2>
         <form onSubmit={handleSubmit}>
           <div className={`${styles.mb3} ${styles.inputGroup}`}>
@@ -189,12 +190,11 @@ const Signup = ({ handlePageChange }) => {
         <div className={styles.modalContent}>
           <Label className={styles.modalLabel}>Success</Label>
           <p>Your account has been created successfully!</p>
-          <p style={{marginLeft:"10px"}}>Your Unique ID is: {userId}</p>
-          <button className={styles.btn} style={{marginLeft:"140px"}} onClick={closeModal}>OK</button>
+          <button onClick={closeModal} className={styles.modalButton}>OK</button>
         </div>
       </Modal>
     </div>
   );
-}
+};
 
 export default Signup;
