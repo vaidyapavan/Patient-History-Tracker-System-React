@@ -162,7 +162,7 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
         <h3>My Patient History</h3>
         <AccountBoxIcon style={{ fontSize: "100px" }} />
       </div>
-      <h2 style={{ marginLeft: "1600px" }}>{doctorName}</h2>
+      <h2 style={{ marginLeft: "1450px" }}>{doctorName}</h2>
 
       <div>
         <div className={styles.search}>
@@ -226,13 +226,17 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
                 <td>{item.medical}</td>
                 <td>{item.description}</td>
                 <td>
-                  <EditButtonWithTooltip onClick={() => goToUpdate(item)} />
-                  <DeleteButtonWithTooltip onClick={() => confirmDelete(item.id)} />
+                <td>
+  <button onClick={() => goToUpdate(item)}>Edit</button>
+  <button onClick={() => confirmDelete(item.id)}>Delete</button>
+</td>
+
                 </td>
               </tr>
             ))}
           </tbody>
         </table>
+        <button style={{marginLeft:"700px"}} onClick={goToHomepage}>Back</button>
       </div>
 
       {/* Modal for delete confirmation */}

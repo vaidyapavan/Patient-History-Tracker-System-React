@@ -1,0 +1,16 @@
+/* Signup.module.css */
+
+.slider-container {
+    display: flex;
+    justify-content: center; /* Center horizontally */
+    align-items: center; /* Center vertically */
+    height: 100vh; /* Full viewport height */
+    margin: 0; /* Remove margin to ensure centering */
+}
+
+.slider {
+    width: 100%;           /* Make slider responsive */
+    max-width: 1200px;     /* Max width for the slider */
+    height: auto;          /* Maintain aspect ratio */
+    border-radius: 10px;   /* Rounded corners */
+}

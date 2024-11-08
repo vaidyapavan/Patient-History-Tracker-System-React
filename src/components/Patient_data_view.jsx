@@ -105,11 +105,14 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
         </tr>
       ))}
     </tbody>
+
+    
   </table>
 ) : (
   <p>{message || 'No patient data available'}</p>
 )}
-
+<br></br>
+<button style={{marginLeft:"700px"}}  onClick={() => handlePageChange('Homepage')}>Back</button>
       </div>
 
       {/* Modal for delete confirmation */}

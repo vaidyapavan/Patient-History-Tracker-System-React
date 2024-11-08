@@ -38,7 +38,8 @@
 
 .table {
   width: 100%;
-  border-collapse: collapse;
+  
+
 }
 
 .table th, .table td {
@@ -48,6 +49,10 @@
 
 .table tr:nth-child(even) {
   background-color: #f2f2f2; /* Zebra striping */
+}
+
+.table tr:hover {
+  background-color:white;
 }
 
 .modal-content {

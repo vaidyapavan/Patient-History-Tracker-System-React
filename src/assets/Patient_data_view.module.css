@@ -31,17 +31,25 @@ margin-top: 50px;
 .table {
   width: 100%;
   margin-top: 20px;
+  border-collapse: collapse; /* Ensures no spacing between borders */
 }
 
 .table th,
 .table td {
   padding: 10px;
   text-align: left;
+  border: none; /* Removes borders between cells */
 }
 
-.table tr:nth-child(even) {
-  background-color: #f2f2f2; /* Zebra striping */
+.table tr:hover {
+  background-color: white;
 }
+
+/* Optional: To remove any default table borders or gridlines */
+.table tr {
+  border: none; /* Ensures no borders around the row */
+}
+
 
 .profile {
   text-align: center; /* Center align profile info */
