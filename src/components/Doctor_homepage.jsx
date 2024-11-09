@@ -11,6 +11,8 @@ import ArrowBackIosIcon from '@mui/icons-material/ArrowBackIos';
 import AddIcon from '@mui/icons-material/Add';
 import SearchIcon from '@mui/icons-material/Search';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 import styles from '../assets/Doctor_homepage.module.css';
 
 const Doctor_homepage = ({ handlePageChange, doctorName }) => {
@@ -160,9 +162,9 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
           Homepage
         </button>
         <h3>My Patient History</h3>
-        <AccountBoxIcon style={{ fontSize: "100px" }} />
+        <AccountBoxIcon style={{ fontSize: "80px", marginRight:"40px" }} />
       </div>
-      <h2 style={{ marginLeft: "1450px" }}>{doctorName}</h2>
+      <h2 style={{ marginLeft: "1420px" }}>{doctorName}</h2>
 
       <div>
         <div className={styles.search}>
@@ -225,26 +227,30 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
                 <td>{item.gender}</td>
                 <td>{item.medical}</td>
                 <td>{item.description}</td>
-                <td>
-                <td>
-  <button onClick={() => goToUpdate(item)}>Edit</button>
-  <button onClick={() => confirmDelete(item.id)}>Delete</button>
-</td>
-
-                </td>
+                
+                  <td>
+                    <EditIcon className={styles.icon} onClick={() => goToUpdate(item)}>Edit</EditIcon>
+                    <DeleteIcon className={styles.icon} onClick={() => confirmDelete(item.id)}>Delete</DeleteIcon>
+                  </td>
+              
               </tr>
             ))}
           </tbody>
         </table>
-        <button style={{marginLeft:"700px"}} onClick={goToHomepage}>Back</button>
+        <button style={{ marginLeft: "700px" }} onClick={goToHomepage}>Back</button>
       </div>
 
       {/* Modal for delete confirmation */}
       <Modal isOpen={isDeleteConfirmModal} onDismiss={cancelDeleteConfirmation}>
         <div className={styles.modalContent}>
-          <h3>Are you sure you want to delete this item?</h3>
-          <button onClick={handleDeleteConfirmation}>Yes</button>
-          <button onClick={cancelDeleteConfirmation}>No</button>
+          <CloseIcon  onClick={cancelDeleteConfirmation} className={styles.deleteCloseIcon}></CloseIcon>
+          <h3>Are you sure to delete this record?</h3>
+          <br></br>
+     
+          <button onClick={handleDeleteConfirmation} style={{marginLeft:"10px"}} className={styles.deletemodalbuttons}>Yes</button>
+          <button onClick={cancelDeleteConfirmation} className={styles.deletemodalbuttons}>No</button>
+
+          
         </div>
       </Modal>
     </div>

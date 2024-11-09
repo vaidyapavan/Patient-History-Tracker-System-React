@@ -67,3 +67,35 @@
 .btn {
   margin: 5px;
 }
+
+
+.icon {
+  margin-right: 10px; 
+}
+
+.deletecontainer
+{
+  gap: 15px;
+}
+.deletemodalbuttons
+{
+
+   gap: 15px;
+   
+   margin-left: 20px;
+}
+.deleteCloseIcon
+{
+  margin-left: 440px;
+  cursor: pointer;
+  margin-top: -20px;
+}
+
+.modalContent {
+  width: 500px; 
+  background-color: white; 
+  padding: 20px; 
+  border-radius: 8px;
+  position: relative; 
+  text-align: center; 
+}
