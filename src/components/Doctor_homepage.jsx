@@ -206,38 +206,43 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
 
         {message && <p>{message}</p>}
 
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th onClick={() => sortData('date')}>Date {sortOrder.date === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
-              <th onClick={() => sortData('name')}>Name {sortOrder.name === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
-              <th onClick={() => sortData('age')}>Age {sortOrder.age === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
-              <th>Gender</th>
-              <th>Medical Condition</th>
-              <th>Description</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {filteredData.map((item, index) => (
-              <tr key={index}>
-                <td>{formatDate(item.patient_date)}</td>
-                <td>{item.patient_name}</td>
-                <td>{item.age}</td>
-                <td>{item.gender}</td>
-                <td>{item.medical}</td>
-                <td>{item.description}</td>
-                
-                  <td>
-                    <EditIcon className={styles.icon} onClick={() => goToUpdate(item)}>Edit</EditIcon>
-                    <DeleteIcon className={styles.icon} onClick={() => confirmDelete(item.id)}>Delete</DeleteIcon>
-                  </td>
-              
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button style={{ marginLeft: "700px" }} onClick={goToHomepage}>Back</button>
+        <div className={styles.tableWrapper}>
+  <table className={styles.table}>
+    <thead>
+      <tr>
+        <th onClick={() => sortData('date')}>Date {sortOrder.date === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+        <th onClick={() => sortData('name')}>Name {sortOrder.name === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+        <th onClick={() => sortData('age')}>Age {sortOrder.age === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+        <th>Gender</th>
+        <th>Medical Condition</th>
+        <th>Description</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {filteredData.map((item, index) => (
+        <tr key={index}>
+          <td>{formatDate(item.patient_date)}</td>
+          <td>{item.patient_name}</td>
+          <td>{item.age}</td>
+          <td>{item.gender}</td>
+          <td>{item.medical}</td>
+          <td>{item.description}</td>
+          <td>
+            <EditIcon className={styles.icon} onClick={() => goToUpdate(item)}>Edit</EditIcon>
+            <DeleteIcon className={styles.icon} onClick={() => confirmDelete(item.id)}>Delete</DeleteIcon>
+          </td>
+        </tr>
+      ))}
+    </tbody>
+  </table>
+</div>
+<br></br>
+
+<div className= {styles.footer}>
+<button style={{ marginLeft: "700px" }} onClick={goToHomepage}>Back</button>
+</div>
+     
       </div>
 
       {/* Modal for delete confirmation */}

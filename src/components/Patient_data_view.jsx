@@ -59,15 +59,15 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
           Go to Homepage
         </button>
         <br></br>
-        <h2 style={{marginLeft:"700px"}}>My Medical History</h2>
+        <h2 style={{ marginLeft: "700px" }}>My Medical History</h2>
 
         <div className={styles.profile}>
           <div className={styles.profileInfo}>
-           
-            <AccountBoxIcon style={{ fontSize: '100px' }} />
+
+            <AccountBoxIcon style={{ fontSize: '100px', marginTop: "-100px" }} />
             <h5 className={styles.patientName}>{patientName}</h5>
           </div>
-        </div>  
+        </div>
 
         <div className={styles.filterSection}>
           <SearchBox
@@ -85,34 +85,38 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
         </div>
 
         {filteredData.length > 0 ? (
-  <table className={`table table-bordered ${styles.table}`}>
-    <thead>
-      <tr>
-        <th>Date</th>
-        <th>Doctor Name</th>
-        <th>Medical Condition</th>
-        <th>Description</th>
-      </tr>
-    </thead>
-    <tbody>
-      {filteredData.map((item) => (
-        <tr key={item.id}>
-          {/* Format the patient_date field in DD-MM-YY format */}
-          <td>{item.patient_date ? format(new Date(item.patient_date), 'dd-MM-yy') : 'No Date Available'}</td>
-          <td>{item.doctor_name}</td>
-          <td>{item.medical ? item.medical : 'No Medical Data Available'}</td>
-          <td>{item.description}</td>
-        </tr>
-      ))}
-    </tbody>
+          <div className={styles.tableWrapper}> {/* Wrap the table with this div */}
+            <table className={`table table-bordered ${styles.table}`}>
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Doctor Name</th>
+                  <th>Medical Condition</th>
+                  <th>Description</th>
+                </tr>
+              </thead>
+              <tbody>
+                {filteredData.map((item) => (
+                  <tr key={item.id}>
+                    {/* Format the patient_date field in DD-MM-YY format */}
+                    <td>{item.patient_date ? format(new Date(item.patient_date), 'dd-MM-yy') : 'No Date Available'}</td>
+                    <td>{item.doctor_name}</td>
+                    <td>{item.medical ? item.medical : 'No Medical Data Available'}</td>
+                    <td>{item.description}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        ) : (
+          <p>{message || 'No patient data available'}</p>
+        )}
 
-    
-  </table>
-) : (
-  <p>{message || 'No patient data available'}</p>
-)}
-<br></br>
-<button style={{marginLeft:"700px"}}  onClick={() => handlePageChange('Homepage')}>Back</button>
+        <br></br>
+        <div className={styles.footer}>
+          <button style={{ marginLeft: "700px" }} onClick={() => handlePageChange('Homepage')}>Back</button>
+        </div>
+
       </div>
 
       {/* Modal for delete confirmation */}

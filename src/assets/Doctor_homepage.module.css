@@ -36,23 +36,36 @@
   margin-right: 20px;
 }
 
+.tableWrapper {
+  max-height: 400px; /* Set maximum height for the table */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  margin-top: 20px;  /* Add some space above the table */
+}
+
+/* General table styling */
 .table {
   width: 100%;
-  
-
+  border-collapse: collapse;
 }
 
-.table th, .table td {
+.table th {
+  padding: 10px;
+  position: sticky; /* Fix the header at the top */
+  top: 0; /* Stick the header at the top */
+  background-color: #fff; /* Background for the header to distinguish it */
+  z-index: 10; /* Ensure header stays above the scrollable content */
+  border-bottom: 1px solid #ddd; /* Add border for better visibility */
+}
+
+.table td {
   padding: 10px;
   text-align: left;
+  border-bottom: 1px solid #ddd; /* Optional: Add border for the rows */
 }
 
-.table tr:nth-child(even) {
-  background-color: #f2f2f2; /* Zebra striping */
-}
-
+/* Hover effect for rows */
 .table tr:hover {
-  background-color:white;
+  background-color: #f9f9f9; /* Light background on hover */
 }
 
 .modal-content {
@@ -98,4 +111,8 @@
   border-radius: 8px;
   position: relative; 
   text-align: center; 
+}
+
+.footer{
+  background-color: rgba(0, 0, 0, 0.137);
 }
