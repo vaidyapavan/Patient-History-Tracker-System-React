@@ -12,6 +12,7 @@ initializeIcons();
 
 const Create = ({ handlePageChange }) => {
     const [patientName, setPatientName] = useState('');
+    const [patientID, setPatientID] = useState(''); // New state for patient ID
     const [patientEmail, setPatientEmail] = useState('');
     const [patientDate, setPatientDate] = useState('');
     const [doctorName, setDoctorName] = useState('');
@@ -54,6 +55,7 @@ const Create = ({ handlePageChange }) => {
         try {
             const response = await axios.post('http://localhost:8086/create', {
                 patient_name: patientName,
+                patient_id: patientID, // Sending the patientID to the backend
                 patient_email: patientEmail,
                 patient_date: patientDate,
                 doctor_name: doctorName,
@@ -94,6 +96,12 @@ const Create = ({ handlePageChange }) => {
         // Validate Patient Name
         if (patientName.length <= 3 || !patientName.match(nameRegex)) {
             newErrors.patientName = 'Name must be more than 3 letters and contain only letters.';
+            isValid = false;
+        }
+
+        // Validate Patient ID
+        if (!patientID) {
+            newErrors.patientID = 'Patient ID is required.';
             isValid = false;
         }
 
@@ -180,6 +188,21 @@ const Create = ({ handlePageChange }) => {
                         )}
                     </div>
                     <div className="mb-3">
+                        <Label required>Patient ID</Label> {/* New Patient ID input field */}
+                        <input
+                            placeholder="Enter patient ID"
+                            type="text"
+                            className={`form-control ${errors.patientID ? 'is-invalid' : ''}`}
+                            value={patientID}
+                            onChange={handleChange(setPatientID, 'patientID')}
+                        />
+                        {errors.patientID && (
+                            <div className="invalid-feedback">
+                                {errors.patientID}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-3">
                         <Label required>Patient Email</Label>
                         <input
                             placeholder="Enter patient email"
@@ -242,43 +265,31 @@ const Create = ({ handlePageChange }) => {
                         <Label required>Gender</Label>
                         <br />
                         <div style={{ color: "red" }}>{errors.gender}</div>
-                        <div className="form-check" style={{ marginBottom: '4px', marginLeft: "-20px" }}>
+                        <div className="form-check" style={{ marginBottom: '10px', marginTop: '8px' }}>
                             <input
-                                className="radio-container"
+                                className="form-check-input"
                                 type="radio"
-                                id="Male"
-                                value="male"
-                                checked={gender === 'male'}
-                                onChange={handleChange(setGender, 'gender')}
+                                value="Male"
+                                onChange={(e) => setGender(e.target.value)}
+                                checked={gender === "Male"}
                             />
-                            <label className="form-check-label" htmlFor="Male">
-                                Male
-                            </label>
+                            <label className="form-check-label">Male</label>
                         </div>
-                        <div className="form-check" style={{ marginLeft: "-20px" }}>
+                        <div className="form-check">
                             <input
-                                className="radio-button"
+                                className="form-check-input"
                                 type="radio"
-                                id="Female"
-                                value="female"
-                                checked={gender === 'female'}
-                                onChange={handleChange(setGender, 'gender')}
+                                value="Female"
+                                onChange={(e) => setGender(e.target.value)}
+                                checked={gender === "Female"}
                             />
-                            <label className="form-check-label" htmlFor="Female">
-                                Female
-                            </label>
+                            <label className="form-check-label">Female</label>
                         </div>
-                        {errors.gender && (
-                            <div className="invalid-feedback">
-                                {errors.gender}
-                            </div>
-                        )}
                     </div>
                     <div className="mb-3">
                         <Label required>Medical</Label>
-                        <input
-                            placeholder="Enter medical conditions"
-                            type="text"
+                        <textarea
+                            placeholder="Enter medical condition"
                             className={`form-control ${errors.medical ? 'is-invalid' : ''}`}
                             value={medical}
                             onChange={handleChange(setMedical, 'medical')}
@@ -303,17 +314,19 @@ const Create = ({ handlePageChange }) => {
                             </div>
                         )}
                     </div>
-                    <button type="button" className="btn btn-primary" style={{ marginLeft: '170px', marginRight: '10px' }} onClick={cancelForm}>Back</button>
-                    <button type="submit" className="btn btn-primary" style={{ marginLeft: '10px' }}>ADD</button>
+                    <div className="d-flex justify-content-center mt-3">
+                        <button type="submit" className="btn btn-primary">Submit</button>
+                    </div>
                 </form>
-            </div>
 
-            <Modal isOpen={isModalOpen} onDismiss={closeModal} className="custom-modal">
-                <div className="modal-content">
-                    <div className="success-message" style={{ color: "black" }}>Form data submitted successfully!!</div>
-                    <button className="ok-button" style={{ marginLeft: "100px", marginTop: "40px" }} onClick={closeModal}>OK</button>
-                </div>
-            </Modal>
+                <Modal isOpen={isModalOpen} onDismiss={closeModal}>
+                    <div className="modal-content">
+                        <h3>Success!</h3>
+                        <p>Data successfully added.</p>
+                        <button onClick={closeModal} className="btn btn-primary">OK</button>
+                    </div>
+                </Modal>
+            </div>
         </div>
     );
 };

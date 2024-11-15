@@ -4,7 +4,8 @@ import axios from 'axios';
 import { Modal } from '@fluentui/react/lib/Modal';
 import { Label } from '@fluentui/react/lib/Label';
 import { MessageBar, MessageBarType } from '@fluentui/react';
-import { v4 as uuidv4 } from 'uuid'; // Import the UUID library
+// import { v4 as uuidv4 } from 'uuid'; 
+import shortid from 'shortid';
 import CloseIcon from '@mui/icons-material/Close';
 
 
@@ -86,7 +87,7 @@ const Signup = ({ handlePageChange }) => {
   const handleSubmit = (event) => {
     event.preventDefault();
     if (validate()) {
-      const userId = uuidv4(); // Generate a unique ID
+      const userId = shortid.generate(); 
       const userData = { ...values, userId }; // Include the ID in the data
   
       axios.post('http://localhost:8086/signup', userData)
@@ -190,6 +191,8 @@ const Signup = ({ handlePageChange }) => {
         <div className={styles.modalContent}>
           <Label className={styles.modalLabel}>Success</Label>
           <p>Your account has been created successfully!</p>
+          <p>Please check youe Email ID  We have send your unique patient ID, </p>
+          <p> Keep it secure and don't share with anyone</p>
           <button onClick={closeModal} className={styles.modalButton}>OK</button>
         </div>
       </Modal>
