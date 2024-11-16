@@ -12,6 +12,10 @@ import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
 import styles from '../assets/Doctor_homepage.module.css';
+import {
+  DatePicker,
+  defaultDatePickerStrings,
+} from '@fluentui/react';
 
 const Doctor_homepage = ({ handlePageChange, doctorName }) => {
   const [data, setData] = useState([]);
@@ -23,7 +27,9 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
   const [sortOrder, setSortOrder] = useState({ date: 'asc', name: 'asc', age: 'asc' });
   const [genderTerm, setGenderTerm] = useState('');
   const [medicalTerm, setMedicalTerm] = useState('');
-
+  const [startDate, setStartDate] = useState(null); // To store start date
+  const [endDate, setEndDate] = useState(null); // To store end date
+  const [filteredDataState, setFilteredDataState] = useState([]);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -102,21 +108,27 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
     setSearchId(e.target.value);
   };
 
-
-
   const filteredData = data.filter((item) => {
     const matchesName = (item.patient_name || '').toLowerCase().includes(searchName.toLowerCase());
     
-    // Check for null or undefined patient_id before calling .toString()
-    const matchesId = searchId === '' || (item.patient_id && item.patient_id.toString().includes(searchId));  
+    // Handle date range filtering
+    const itemDate = item.patient_date ? new Date(item.patient_date) : null;
+    const isWithinDateRange =
+      (!startDate || (itemDate && itemDate >= startDate)) &&
+      (!endDate || (itemDate && itemDate <= endDate));
   
+    // Handle ID matching
+    const matchesId = searchId === '' || (item.patient_id && item.patient_id.toString().includes(searchId));
+  
+    // Gender and medical condition matching
     const matchesGender = genderTerm === '' || (item.gender || '').toLowerCase() === genderTerm.toLowerCase();
     const matchesMedical = medicalTerm === '' || (item.medical || '').toLowerCase().includes(medicalTerm.toLowerCase());
   
-    return matchesName && matchesId && matchesGender && matchesMedical;
+    return isWithinDateRange && matchesName && matchesId && matchesGender && matchesMedical;
   });
-  
-
+  const handleGoClick = () => {
+    setFilteredDataState(filteredData);  // Store filtered data in state
+  };
   useEffect(() => {
     if ((searchName || searchId || genderTerm || medicalTerm) && filteredData.length === 0) {
       setMessage('No data found');
@@ -162,24 +174,25 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
           Homepage
         </button>
         <h3>My Patient History</h3>
-        <AccountBoxIcon style={{ fontSize: "80px", marginRight:"40px" }} />
+        <AccountBoxIcon style={{ fontSize: "80px", marginRight: "40px" }} />
       </div>
       <h2 style={{ marginLeft: "1420px" }}>{doctorName}</h2>
 
       <div>
         <div className={styles.search}>
           <div className={styles.searchInputs}>
+            
             <input
               type='text'
               placeholder='Enter your Patient Name'
               value={searchName}
-              onChange={handleSearchNameChange}  // OnChange for name search
+              onChange={handleSearchNameChange}  
             />
             <input
               type='text'
               placeholder='Enter your Patient ID'
               value={searchId}
-              onChange={handleSearchIdChange}  // OnChange for ID search
+              onChange={handleSearchIdChange}  
             />
           </div>
           <div className={styles.gender}>
@@ -199,11 +212,41 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
               onChange={handleMedicalChange}
             />
           </div>
-          <button className="btn btn-primary mb-3 add-button" onClick={addPatient}>
-            <AddIcon />
-            Add New Patient
-          </button>
+          <div>
+            <DatePicker
+              className={styles.startDatePicker}
+              placeholder='Select start date'
+              value={startDate}
+              onSelectDate={(date) => setStartDate(date)}
+              strings={defaultDatePickerStrings}
+              styles={{
+
+                textField: { paddingRight: 30 },
+              }}
+            />
+          </div>
+          <div>
+            <DatePicker
+              placeholder='Select end Date'
+              value={endDate}
+              onSelectDate={(date) => setEndDate(date)}
+              strings={defaultDatePickerStrings}
+              styles={{
+
+                textField: { paddingRight: 30 },
+
+              }}
+            />
+          </div>
+          <div>   
+           <button className="btn btn-primary mb-3 add-button" onClick={addPatient} style={{marginRight:"10px"}} >
+          <AddIcon />
+          Add New Patient 
+        </button>
         </div>
+       
+        </div>
+       
 
         {message && <p>{message}</p>}
 
@@ -211,12 +254,12 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
           <table className={styles.table}>
             <thead>
               <tr>
-                <th onClick={() => sortData('date')}>Date {sortOrder.date === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
-                <th onClick={() => sortData('name')}>Name {sortOrder.name === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
-                <th>PatientID</th>
+                <th onClick={() => sortData('date')}> Doctor Visiting Date {sortOrder.date === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+                <th onClick={() => sortData('name')}> Patient Name {sortOrder.name === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
+                <th>Patient ID</th>
                 <th onClick={() => sortData('age')}>Age {sortOrder.age === 'asc' ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}</th>
                 <th>Gender</th>
-                <th>Medical</th>
+                <th>Doctpr prescription</th>
                 <th>Description</th>
                 <th>Actions</th>
               </tr>
@@ -232,13 +275,19 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
                   <td>{item.medical}</td>
                   <td>{item.description}</td>
                   <td>
-                    <button onClick={() => goToUpdate(item)}><EditIcon /></button>
-                    <button onClick={() => confirmDelete(item.id)}><DeleteIcon /></button>
+          
+                    <EditIcon onClick={() => goToUpdate(item)} className={styles.editIcon}></EditIcon>
+                    <DeleteIcon onClick={() => confirmDelete(item.id)} className={styles.deleteIcon}></DeleteIcon>
+                    
                   </td>
                 </tr>
               ))}
             </tbody>
           </table>
+        </div>
+        <br></br>
+        <div className={styles.footer}>
+          <button style={{ marginLeft: "700px" }} onClick={() => handlePageChange('Homepage')}>Back</button>
         </div>
       </div>
 

@@ -1,19 +1,23 @@
 import React from "react";
 import SimpleImageSlider from "react-simple-image-slider";
 import slide1 from '../assets/images/access1.jpeg';
-import slide2 from '../assets/images/access2.jpeg';
-import slide3 from '../assets/images/access3.jpeg';
-import slide4 from '../assets/images/access4.jpeg';
+import slide2 from '../assets/images/access2.jpg';
+import slide3 from '../assets/images/access3.jpg';
+import slide4 from '../assets/images/access4.jpg';
+import slide5 from '../assets/images/access5.jpg';
+import slide6 from '../assets/images/access6.jpg';
 import '../assets/ImageSlider.css';
 
 // FontAwesome icons
 import { FaArrowLeft, FaArrowRight } from 'react-icons/fa';
 
 const images = [
-    { url: slide2 },
-    { url: slide3 },
-    {url:  slide4},
-    { url: slide1 }
+    { url: slide6 },
+    { url: slide5 },
+    {url:  slide3},
+    { url: slide4 },
+    { url: slide1 },
+    { url: slide2 }
     
 ];
 

@@ -1,335 +1,328 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from 'react';
+import axios from 'axios';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Modal } from '@fluentui/react/lib/Modal';
 import CloseIcon from '@mui/icons-material/Close';
-import Select from 'react-select';
-import '../assets/Update.css';
 import { Label } from '@fluentui/react/lib/Label';
+import '../assets/Create.css';
+import { initializeIcons } from '@fluentui/font-icons-mdl2';
+
+initializeIcons();
 
 const Update = ({ handlePageChange }) => {
-    const [id, setId] = useState('');
+    const { id } = useParams(); // Get patient ID from the URL
+    console.log(id)
     const [patientName, setPatientName] = useState('');
+    const [patientID, setPatientID] = useState('');
     const [patientEmail, setPatientEmail] = useState('');
     const [patientDate, setPatientDate] = useState('');
     const [doctorName, setDoctorName] = useState('');
     const [mobileNumber, setMobileNumber] = useState('');
     const [age, setAge] = useState('');
     const [gender, setGender] = useState('');
-    const [medical, setMedical] = useState([]);
+    const [medical, setMedical] = useState('');
     const [description, setDescription] = useState('');
-    const [isSaveModalOpen, setIsSaveModalOpen] = useState(false);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [errors, setErrors] = useState({});
-
     const navigate = useNavigate();
 
     const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const nameRegex = /^[a-zA-Z\s]*$/;
     const mobileNumberRegex = /^[0-9]{10}$/;
 
+    // Fetch the patient data on component mount
     useEffect(() => {
-        const storedId = localStorage.getItem("ID");
-        if (storedId) {
-            setId(storedId);
-            axios.get(`http://localhost:8085/getData`)
-                .then(response => {
-                    const data = response.data.find(item => item.id === parseInt(storedId));
-                    if (data) {
-                        setPatientName(data.patientName);
-                        setPatientEmail(data.patientEmail);
-                        setPatientDate(data.patientDate);
-                        setDoctorName(data.doctorName);
-                        setMobileNumber(data.mobileNumber);
-                        setAge(data.age);
-                        setGender(data.gender);
-                        setMedical(data.medical.map(med => ({ value: med, label: med })));
-                        setDescription(data.description);
-                    }
-                })
-                .catch(error => {
-                    console.error('Error fetching data:', error);
-                });
+        const fetchPatientData = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8086/patients/${id}`);
+                const {
+                    patient_name, patient_id, patient_email, patient_date, doctor_name,
+                    mobile_number, age, gender, medical, description
+                } = response.data;
+
+                // Set the state with fetched data
+                setPatientName(patient_name);
+                setPatientID(patient_id);
+                setPatientEmail(patient_email);
+                setPatientDate(patient_date);
+                setDoctorName(doctor_name);
+                setMobileNumber(mobile_number);
+                setAge(age);
+                setGender(gender);
+                setMedical(medical);
+                setDescription(description);
+            } catch (error) {
+                console.error('Error fetching patient data:', error);
+            }
+        };
+
+        fetchPatientData();
+    }, [id]);
+
+    const handleChange = (setter, field) => (e) => {
+        const value = e.target.value;
+        setter(value);
+        if (value === '') {
+            setErrors((prevErrors) => ({ ...prevErrors, [field]: `${field} is required.` }));
+        } else {
+            setErrors((prevErrors) => ({ ...prevErrors, [field]: '' }));
         }
-    }, []);
+    };
 
     const capitalizeFirstLetter = (string) => {
         return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+    
+        if (!validateForm()) {
+            return;
+        }
+    
+        try {
+            const response = await axios.put(`http://localhost:8086/patients/${id}`, {
+                patient_name: patientName,
+                patient_id: patientID,
+                patient_email: patientEmail,
+                patient_date: patientDate,
+                doctor_name: doctorName,
+                mobile_number: mobileNumber,
+                age,
+                gender: capitalizeFirstLetter(gender),
+                medical,
+                description
+            });
+    
+            console.log('Form data updated successfully:', response.data);
+    
+            setIsModalOpen(true);
+        } catch (error) {
+            console.error('Error updating form data:', error);
+        }
+    };
+
+    const closeModal = () => {
+        setIsModalOpen(false);
+        handlePageChange('Doctor_homepage');
+    };
+
+    const cancelForm = () => {
+        handlePageChange('Doctor_homepage');
     };
 
     const validateForm = () => {
         let isValid = true;
         const newErrors = {};
 
-        if (patientName.length <= 3 || !patientName.match(nameRegex)) {
-            newErrors.patientName = 'Name must be more than 3 letters and contain only letters.';
+        // Name validation
+        if (!patientName || !nameRegex.test(patientName)) {
+            newErrors.patientName = 'Patient name is required and should contain only letters.';
             isValid = false;
         }
-
-        if (!patientEmail.match(emailRegex)) {
-            newErrors.patientEmail = 'Invalid email address.';
+        // Email validation
+        if (!patientEmail || !emailRegex.test(patientEmail)) {
+            newErrors.patientEmail = 'Invalid email format.';
             isValid = false;
         }
-
-        if (!patientDate) {
-            newErrors.patientDate = 'Patient date is required.';
+        // Mobile number validation
+        if (!mobileNumber || !mobileNumberRegex.test(mobileNumber)) {
+            newErrors.mobileNumber = 'Mobile number should be a valid 10-digit number.';
             isValid = false;
         }
-
-        if (doctorName.length <= 3 || !doctorName.match(nameRegex)) {
-            newErrors.doctorName = 'Doctor name must be more than 3 letters and contain only letters.';
-            isValid = false;
-        }
-
-        if (!mobileNumber.match(mobileNumberRegex)) {
-            newErrors.mobileNumber = 'Mobile number must be 10 digits.';
-            isValid = false;
-        }
-
-        if (!age || isNaN(age)) {
-            newErrors.age = 'Age must be a valid number.';
-            isValid = false;
-        }
-
-        if (!gender) {
-            newErrors.gender = 'Gender field is required.';
-            isValid = false;
-        }
-
-        if (medical.length === 0) {
-            newErrors.medical = 'At least one medical condition must be selected.';
-            isValid = false;
-        }
-
-        if (description.length <= 10) {
-            newErrors.description = 'Description must be more than 10 characters.';
-            isValid = false;
-        }
+        // Additional field validation if needed (doctorName, medical, etc.)
 
         setErrors(newErrors);
         return isValid;
     };
 
-    const handleUpdate = (e) => {
-        e.preventDefault();
-        if (!validateForm()) {
-            return;
-        }
-
-        const capitalizedGender = capitalizeFirstLetter(gender);
-        axios.put(`http://localhost:8086/update/${id}`, {
-            patientName,
-            patientEmail,
-            patientDate,
-            doctorName,
-            mobileNumber,
-            age,
-            gender: capitalizedGender,
-            medical: medical.map(m => m.value),
-            description
-        })
-            .then(response => {
-                setIsSaveModalOpen(true);
-            })
-            .catch(error => {
-                console.error('Error updating item:', error);
-            });
-    };
-
-    const handleMedicalChange = (selectedOptions) => {
-        setMedical(selectedOptions);
-    };
-
-    const cancelUpdate = () => {
-        handlePageChange('Doctor_homepage');
-    };
-
-    const closeSaveModal = () => {
-        setIsSaveModalOpen(false);
-        handlePageChange('Doctor_homepage');
-    };
-
-    const medicalOptions = [
-        { value: 'Reading', label: 'Reading' },
-        { value: 'Gaming', label: 'Gaming' },
-        { value: 'Travelling', label: 'Travelling' },
-        { value: 'Cooking', label: 'Cooking' },
-        { value: 'Badminton', label: 'Badminton' },
-        { value: 'Singing', label: 'Singing' },
-        { value: 'Writing', label: 'Writing' },
-        { value: 'Painting', label: 'Painting' },
-        { value: 'Cricket', label: 'Cricket' },
-        { value: 'Other', label: 'Other' },
-        { value: 'None', label: 'None' }
-    ];
+    const idFromLocalStorage = localStorage.getItem('ID'); // Retrieve ID from localStorage
 
     return (
-        <div className="update-container">
-            <CloseIcon onClick={cancelUpdate} className="close-icon" style={{ marginLeft: "540px", marginTop: "-20px", cursor: "pointer" }} />
-
-            <h2>Update Patient Data</h2>
-            <form onSubmit={handleUpdate}>
-                <div className="mb-3">
-                    <Label required>Patient Name</Label>
-                    <input
-                        type="text"
-                        className={`form-control ${errors.patientName ? 'is-invalid' : ''}`}
-                        value={patientName}
-                        onChange={(e) => setPatientName(e.target.value)}
-                    />
-                    {errors.patientName && (
-                        <div className="invalid-feedback">
-                            {errors.patientName}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Patient Email</Label>
-                    <input
-                        type="text"
-                        className={`form-control ${errors.patientEmail ? 'is-invalid' : ''}`}
-                        value={patientEmail}
-                        onChange={(e) => setPatientEmail(e.target.value)}
-                    />
-                    {errors.patientEmail && (
-                        <div className="invalid-feedback">
-                            {errors.patientEmail}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Patient Date</Label>
-                    <input
-                        type="date"
-                        className={`form-control ${errors.patientDate ? 'is-invalid' : ''}`}
-                        value={patientDate}
-                        onChange={(e) => setPatientDate(e.target.value)}
-                    />
-                    {errors.patientDate && (
-                        <div className="invalid-feedback">
-                            {errors.patientDate}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Doctor Name</Label>
-                    <input
-                        type="text"
-                        className={`form-control ${errors.doctorName ? 'is-invalid' : ''}`}
-                        value={doctorName}
-                        onChange={(e) => setDoctorName(e.target.value)}
-                    />
-                    {errors.doctorName && (
-                        <div className="invalid-feedback">
-                            {errors.doctorName}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Mobile Number</Label>
-                    <input
-                        type="text"
-                        className={`form-control ${errors.mobileNumber ? 'is-invalid' : ''}`}
-                        value={mobileNumber}
-                        onChange={(e) => setMobileNumber(e.target.value)}
-                    />
-                    {errors.mobileNumber && (
-                        <div className="invalid-feedback">
-                            {errors.mobileNumber}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Age</Label>
-                    <input
-                        type="text"
-                        className={`form-control ${errors.age ? 'is-invalid' : ''}`}
-                        value={age}
-                        onChange={(e) => setAge(e.target.value)}
-                    />
-                    {errors.age && (
-                        <div className="invalid-feedback">
-                            {errors.age}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Medical</Label>
-                    <Select
-                        isMulti
-                        name="medical"
-                        options={medicalOptions}
-                        className={`basic-multi-select ${errors.medical ? 'is-invalid' : ''}`}
-                        classNamePrefix="select"
-                        value={medical}
-                        onChange={handleMedicalChange}
-                    />
-                    {errors.medical && (
-                        <div className="invalid-feedback">
-                            {errors.medical}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Description</Label>
-                    <textarea
-                        className={`form-control ${errors.description ? 'is-invalid' : ''}`}
-                        value={description}
-                        onChange={(e) => setDescription(e.target.value)}
-                    />
-                    {errors.description && (
-                        <div className="invalid-feedback">
-                            {errors.description}
-                        </div>
-                    )}
-                </div>
-                <div className="mb-3">
-                    <Label required>Gender</Label>
-                    <div className="form-check" style={{ marginBottom: '10px' }}>
+        <div className="create-container">
+            <div className="form-container">
+                <CloseIcon onClick={cancelForm} className="close-icon" style={{ marginLeft: "890px", marginTop: "-20px", marginRight: "-30px", cursor: "pointer" }} />
+                <h2 className="form-title">Update Patient Data</h2>
+                <form onSubmit={handleSubmit}>
+                    <div className="mb-3">
+                        <Label required>Doctor Name</Label>
                         <input
-                            className={`form-check-input ${errors.gender ? 'is-invalid' : ''}`}
-                            type="radio"
-                            id="male"
-                            value="male"
-                            checked={gender === 'male'}
-                            onChange={(e) => setGender(e.target.value)}
+                            placeholder="Enter doctor name"
+                            type="text"
+                            className={`form-control ${errors.doctorName ? 'is-invalid' : ''}`}
+                            value={doctorName}
+                            onChange={handleChange(setDoctorName, 'doctorName')}
                         />
-                        <label className="form-check-label" htmlFor="male">
-                            Male
-                        </label>
+                        {errors.doctorName && (
+                            <div className="invalid-feedback">
+                                {errors.doctorName}
+                            </div>
+                        )}
                     </div>
-                    <div className="form-check">
+                    <div className="mb-3">
+                        <Label required>Patient Name</Label>
                         <input
-                            className={`form-check-input ${errors.gender ? 'is-invalid' : ''}`}
-                            type="radio"
-                            id="female"
-                            value="female"
-                            checked={gender === 'female'}
-                            onChange={(e) => setGender(e.target.value)}
+                            placeholder="Enter patient name"
+                            type="text"
+                            className={`form-control ${errors.patientName ? 'is-invalid' : ''}`}
+                            value={patientName}
+                            onChange={handleChange(setPatientName, 'patientName')}
                         />
-                        <label className="form-check-label" htmlFor="female">
-                            Female
-                        </label>
+                        {errors.patientName && (
+                            <div className="invalid-feedback">
+                                {errors.patientName}
+                            </div>
+                        )}
                     </div>
-                    {errors.gender && (
-                        <div className="invalid-feedback">
-                            {errors.gender}
+                    <div className="mb-3">
+                        <Label required>Patient ID</Label>
+                        <input
+                            placeholder="Enter patient ID"
+                            type="text"
+                            className={`form-control ${errors.patientID ? 'is-invalid' : ''}`}
+                            value={patientID}
+                            onChange={handleChange(setPatientID, 'patientID')}
+                        />
+                        {errors.patientID && (
+                            <div className="invalid-feedback">
+                                {errors.patientID}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-3">
+                        <Label required>Patient Email</Label>
+                        <input
+                            placeholder="Enter patient email"
+                            type="text"
+                            className={`form-control ${errors.patientEmail ? 'is-invalid' : ''}`}
+                            value={patientEmail}
+                            onChange={handleChange(setPatientEmail, 'patientEmail')}
+                        />
+                        {errors.patientEmail && (
+                            <div className="invalid-feedback">
+                                {errors.patientEmail}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-3">
+                        <Label required>Patient Date</Label>
+                        <input
+                            type="date"
+                            className={`form-control ${errors.patientDate ? 'is-invalid' : ''}`}
+                            value={patientDate}
+                            onChange={handleChange(setPatientDate, 'patientDate')}
+                        />
+                        {errors.patientDate && (
+                            <div className="invalid-feedback">
+                                {errors.patientDate}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-3">
+                        <Label required>Mobile Number</Label>
+                        <input
+                            placeholder="Enter mobile number"
+                            type="text"
+                            className={`form-control ${errors.mobileNumber ? 'is-invalid' : ''}`}
+                            value={mobileNumber}
+                            onChange={handleChange(setMobileNumber, 'mobileNumber')}
+                        />
+                        {errors.mobileNumber && (
+                            <div className="invalid-feedback">
+                                {errors.mobileNumber}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-3">
+                        <Label required>Age</Label>
+                        <input
+                            placeholder="Enter age"
+                            type="text"
+                            className={`form-control ${errors.age ? 'is-invalid' : ''}`}
+                            value={age}
+                            onChange={handleChange(setAge, 'age')}
+                        />
+                        {errors.age && (
+                            <div className="invalid-feedback">
+                                {errors.age}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-3">
+                        <Label required>Gender</Label>
+                        <br />
+                        <div style={{ color: "red" }}>{errors.gender}</div>
+                        <div className="form-check" style={{ marginBottom: '10px', marginTop: '8px' }}>
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                value="Male"
+                                onChange={(e) => setGender(e.target.value)}
+                                checked={gender === "Male"}
+                            />
+                            <label className="form-check-label">Male</label>
                         </div>
-                    )}
-                </div>
-                <button type="button" className="btn btn-primary" onClick={cancelUpdate} style={{ marginLeft: "170px", marginRight: "-10px" }}>Cancel</button>
-                <button type="submit" className="btn btn-primary" style={{ marginLeft: '30px', marginRight: "80px" }}>Save</button>
-            </form>
+                        <div className="form-check">
+                            <input
+                                className="form-check-input"
+                                type="radio"
+                                value="Female"
+                                onChange={(e) => setGender(e.target.value)}
+                                checked={gender === "Female"}
+                            />
+                            <label className="form-check-label">Female</label>
+                        </div>
+                    </div>
+                    <div className="mb-3">
+                        <Label required>Medical Condition</Label>
+                        <textarea
+                            className={`form-control ${errors.medical ? 'is-invalid' : ''}`}
+                            rows="4"
+                            placeholder="Enter medical condition"
+                            value={medical}
+                            onChange={handleChange(setMedical, 'medical')}
+                        />
+                        {errors.medical && (
+                            <div className="invalid-feedback">
+                                {errors.medical}
+                            </div>
+                        )}
+                    </div>
+                    <div className="mb-3">
+                        <Label>Description</Label>
+                        <textarea
+                            className="form-control"
+                            rows="4"
+                            placeholder="Enter description"
+                            value={description}
+                            onChange={handleChange(setDescription, 'description')}
+                        />
+                    </div>
+                    <div>
+                    <button  onClick={cancelForm} className="btn btn-primary">
+                            Back
+                        </button>
+                        <button type="submit" className="btn btn-primary">
+                            Save Changes
+                        </button>
+                    </div>
+                </form>
+            </div>
 
-            <Modal isOpen={isSaveModalOpen} onDismiss={closeSaveModal} className="custom-modal">
-                <div className="modal-content" style={{ alignItems: "center" }}>
-                    <br />
-                    <h2 style={{ marginLeft: "10px" }}>Data updated successfully!</h2>
-                    <br />
-                    <button className="btn btn-primary" onClick={closeSaveModal}>OK</button>
+            {/* Modal for success */}
+            <Modal
+                isOpen={isModalOpen}
+                onDismiss={closeModal}
+                isBlocking={false}
+                containerClassName="modal-container"
+            >
+                <div className="modal-content">
+                    <h2>Patient Data Updated Successfully!</h2>
+                    <button onClick={closeModal} className="btn btn-primary">Close</button>
                 </div>
             </Modal>
         </div>
     );
-}
+};
 
 export default Update;

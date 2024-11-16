@@ -12,7 +12,7 @@ initializeIcons();
 
 const Create = ({ handlePageChange }) => {
     const [patientName, setPatientName] = useState('');
-    const [patientID, setPatientID] = useState(''); // New state for patient ID
+    const [patientID, setPatientID] = useState(''); 
     const [patientEmail, setPatientEmail] = useState('');
     const [patientDate, setPatientDate] = useState('');
     const [doctorName, setDoctorName] = useState('');
@@ -82,6 +82,10 @@ const Create = ({ handlePageChange }) => {
     const cancelForm = () => {
         handlePageChange('Doctor_homepage');
     };
+    const goToHomepage = () =>
+    {
+        handleChange('Doctor_homepage');
+    }
 
     const validateForm = () => {
         let isValid = true;
@@ -154,7 +158,7 @@ const Create = ({ handlePageChange }) => {
     return (
         <div className="create-container">
             <div className="form-container">
-                <CloseIcon onClick={cancelForm} className="close-icon" style={{ marginLeft: "490px", marginTop: "-20px", marginRight: "-30px", cursor: "pointer" }} />
+                <CloseIcon onClick={cancelForm} className="close-icon" style={{ marginLeft: "890px", marginTop: "-20px", marginRight: "-30px", cursor: "pointer" }} />
                 <h2 className="form-title">Add Patient Data</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
@@ -315,6 +319,7 @@ const Create = ({ handlePageChange }) => {
                         )}
                     </div>
                     <div className="d-flex justify-content-center mt-3">
+                    <button  onClick={cancelForm} className="btn btn-primary">Back</button>
                         <button type="submit" className="btn btn-primary">Submit</button>
                     </div>
                 </form>

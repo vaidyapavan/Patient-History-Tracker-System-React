@@ -25,11 +25,18 @@
 .search {
   display: flex;
   align-items: center;
+
+}
+.searchinput{
+  gap:10;
+  display: flex;
 }
 
 .searchinput input {
   padding: 8px;
   margin-right: 10px;
+ 
+ 
 }
 
 .gender, .medical {
@@ -115,4 +122,22 @@
 
 .footer{
   background-color: rgba(0, 0, 0, 0.137);
+}
+
+.editIcon
+{
+
+}
+.deleteIcon
+{
+  margin-left: 20px;
+}
+
+.footer
+{
+  background-color: rgba(0, 0, 0, 0.123);
+}
+.searchInputs
+{
+  gap:20px;
 }

@@ -7,22 +7,30 @@ import Navbar from './Navbar';
 import styles from '../assets/Patient_data_view.module.css'; // Import styles
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import { format } from 'date-fns'; // For date formatting
+import {
+  DatePicker,
+  defaultDatePickerStrings,
+} from '@fluentui/react';
 
 const Patient_data_view = ({ handlePageChange, patientName }) => {
   const [data, setData] = useState([]);
+  const [filteredData, setFilteredData] = useState([]);
   const [searchTermDoctor, setSearchTermDoctor] = useState('');
   const [searchTermMedical, setSearchTermMedical] = useState('');
   const [message, setMessage] = useState('');
+  const [startDate, setStartDate] = useState(null); // To store start date
+  const [endDate, setEndDate] = useState(null); // To store end date
   const [isDeleteConfirmModal, setIsDeleteConfirmModal] = useState(false);
   const [deleteId, setDeleteId] = useState(null);
 
   // Fetch patient data by name
   const fetchPatientDataByName = async () => {
     try {
-      const response = await axios.get(`http://localhost:8086/getPatientData/${patientName}`);
-      console.log('Patient data:', response.data); // Log the response to check for 'medical'
+      const encodedName = encodeURIComponent(patientName); // Encode the patient name
+      const response = await axios.get(`http://localhost:8086/getPatientData/${encodedName}`);
       if (response.status === 200) {
         setData(response.data); // Set the fetched data to state
+        setFilteredData(response.data); // Initially set filteredData to all data
         setMessage('');
       } else {
         setMessage('Patient not found');
@@ -32,7 +40,7 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
       setMessage('Error fetching patient data');
     }
   };
-
+  
   // Fetch data when the patientName changes
   useEffect(() => {
     if (patientName) {
@@ -40,12 +48,35 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
     }
   }, [patientName]);
 
-  // Filter the data based on search terms
-  const filteredData = data.filter(
-    (item) =>
-      (!searchTermDoctor || item.doctor_name.toLowerCase().includes(searchTermDoctor.toLowerCase())) &&
-      (!searchTermMedical || item.medical.toLowerCase().includes(searchTermMedical.toLowerCase()))
-  );
+  // Filter data based on search terms and date range
+  const filterData = () => {
+    const filtered = data.filter((item) => {
+      const itemDate = item.patient_date ? new Date(item.patient_date) : null;
+      const isWithinDateRange =
+        (!startDate || (itemDate && itemDate >= startDate)) &&
+        (!endDate || (itemDate && itemDate <= endDate));
+      const matchesDoctor = !searchTermDoctor || item.doctor_name.toLowerCase().includes(searchTermDoctor.toLowerCase());
+      const matchesMedical = !searchTermMedical || item.medical.toLowerCase().includes(searchTermMedical.toLowerCase());
+
+      return isWithinDateRange && matchesDoctor && matchesMedical;
+    });
+
+    if (filtered.length > 0) {
+      setFilteredData(filtered);
+      setMessage('');
+    } else {
+      setFilteredData([]);
+      setMessage('No data present in this range');
+    }
+  };
+
+  // Trigger the filtering when search terms change
+  useEffect(() => {
+    filterData(); // Automatically filter when searchTermDoctor or searchTermMedical changes
+  }, [searchTermDoctor, searchTermMedical, startDate, endDate]);
+
+  // Trigger filtering based on date when "GO" is clicked
+  
 
   return (
     <>
@@ -58,13 +89,12 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
         >
           Go to Homepage
         </button>
-        <br></br>
-        <h2 style={{ marginLeft: "700px" }}>My Medical History</h2>
+        <br />
+        <h2 style={{ marginLeft: '700px' }}>My Medical History</h2>
 
         <div className={styles.profile}>
           <div className={styles.profileInfo}>
-
-            <AccountBoxIcon style={{ fontSize: '100px', marginTop: "-100px" }} />
+            <AccountBoxIcon style={{ fontSize: '100px', marginTop: '-100px' }} />
             <h5 className={styles.patientName}>{patientName}</h5>
           </div>
         </div>
@@ -73,32 +103,62 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
           <SearchBox
             placeholder="Search by Doctor Name"
             value={searchTermDoctor}
-            onChange={(e, newValue) => setSearchTermDoctor(newValue)}
+            onChange={(e, newValue) => setSearchTermDoctor(newValue || '')}
             styles={{ root: { width: 250, marginRight: 10 } }}
           />
           <SearchBox
-            placeholder="Search by Medical Condition"
+            placeholder="Search by Doctor prescription"
             value={searchTermMedical}
-            onChange={(e, newValue) => setSearchTermMedical(newValue)}
+            onChange={(e, newValue) => setSearchTermMedical(newValue || '')}
             styles={{ root: { width: 250 } }}
           />
+
+          <DatePicker
+            className={styles.startDatePicker}
+            placeholder="Select start date"
+            value={startDate}
+            onSelectDate={(date) => {
+              setStartDate(date);
+              filterData(); // Trigger filtering when start date is selected
+            }}
+            strings={defaultDatePickerStrings}
+            styles={{
+              root: { width: 250 }, 
+              textField: { paddingRight: 30 }, 
+              icon: { right: 10 }, 
+            }}
+          />
+          <DatePicker
+            placeholder="Select end Date"
+            value={endDate}
+            onSelectDate={(date) => {
+              setEndDate(date);
+              filterData(); // Trigger filtering when end date is selected
+            }}
+            strings={defaultDatePickerStrings}
+            styles={{
+              root: { width: 250 }, // Adjust the width
+              textField: { paddingRight: 30 }, // Space between text and calendar icon
+              icon: { right: 5 }, // Space the calendar icon from the text field's right side
+            }}
+          />
+
         </div>
 
         {filteredData.length > 0 ? (
-          <div className={styles.tableWrapper}> {/* Wrap the table with this div */}
-            <table className={`table table-bordered ${styles.table}`}>
+          <div className={styles.tableWrapper}>
+            <table className={styles.table}>
               <thead>
                 <tr>
-                  <th>Date</th>
+                  <th>Doctor Visit Date</th>
                   <th>Doctor Name</th>
-                  <th>Medical Condition</th>
+                  <th>Doctor prescription</th>
                   <th>Description</th>
                 </tr>
               </thead>
               <tbody>
                 {filteredData.map((item) => (
                   <tr key={item.id}>
-                    {/* Format the patient_date field in DD-MM-YY format */}
                     <td>{item.patient_date ? format(new Date(item.patient_date), 'dd-MM-yy') : 'No Date Available'}</td>
                     <td>{item.doctor_name}</td>
                     <td>{item.medical ? item.medical : 'No Medical Data Available'}</td>
@@ -112,11 +172,12 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
           <p>{message || 'No patient data available'}</p>
         )}
 
-        <br></br>
+        <br />
         <div className={styles.footer}>
-          <button style={{ marginLeft: "700px" }} onClick={() => handlePageChange('Homepage')}>Back</button>
+          <button style={{ marginLeft: '700px' }} onClick={() => handlePageChange('Homepage')}>
+            Back
+          </button>
         </div>
-
       </div>
 
       {/* Modal for delete confirmation */}

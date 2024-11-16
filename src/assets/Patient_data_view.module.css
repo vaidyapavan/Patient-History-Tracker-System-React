@@ -10,7 +10,7 @@
 }
 
 .profileInfo {
-  margin-bottom: 10px; /* Space below profile info */
+  margin-bottom: 10px; 
   margin-left: 1500px;
 }
 
@@ -22,6 +22,7 @@
   display: flex;
   justify-content: flex-start;
   margin-bottom: 20px; /* Space below filter section */
+  gap: 10px;
 }
 
 .modalHeader {
@@ -38,9 +39,9 @@
 
 /* Adding scrollable table CSS */
 .tableWrapper {
-  max-height: 400px; /* Set maximum height for the table */
-  overflow-y: auto;  /* Enable vertical scrolling */
-  margin-top: 20px;  /* Add some space above the table */
+  max-height: 400px; 
+  overflow-y: auto;  
+  margin-top: 20px;  
 }
 
 .table {
@@ -75,4 +76,8 @@
 .footer
 {
   background-color: rgba(0, 0, 0, 0.123);
+}
+.startDatePicker
+{
+  gap: 10px;
 }
