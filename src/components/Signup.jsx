@@ -186,8 +186,7 @@ const Signup = ({ handlePageChange }) => {
             <button type="button" className={`${styles.btn} ${styles.btnLink}`} onClick={goToSignInPage}>Sign in</button>
           </div>
         </form>
-      </div>
-      <Modal isOpen={isModalOpen} onDismiss={closeModal} className={styles.customModal}>
+        <Modal isOpen={isModalOpen} onDismiss={closeModal} className={styles.customModal}>
         <div className={styles.modalContent}>
           <Label className={styles.modalLabel}>Success</Label>
           <p>Your account has been created successfully!</p>
@@ -196,6 +195,9 @@ const Signup = ({ handlePageChange }) => {
           <button onClick={closeModal} className={styles.modalButton}>OK</button>
         </div>
       </Modal>
+    
+      </div>
+      
     </div>
   );
 };

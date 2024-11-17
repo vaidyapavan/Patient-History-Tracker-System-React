@@ -12,7 +12,7 @@ import {
   defaultDatePickerStrings,
 } from '@fluentui/react';
 
-const Patient_data_view = ({ handlePageChange, patientName }) => {
+const Patient_data_view = ({ handlePageChange, patientName, patientId }) => {
   const [data, setData] = useState([]);
   const [filteredData, setFilteredData] = useState([]);
   const [searchTermDoctor, setSearchTermDoctor] = useState('');
@@ -48,19 +48,58 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
     }
   }, [patientName]);
 
-  // Filter data based on search terms and date range
+
+  // // Fetch patient data by ID
+  // const fetchPatientDataById = async () => {
+  //   try {
+  //     const response = await axios.get(`http://localhost:8086/getPatientDataById/${patientId}`);
+  //     if (response.status === 200) {
+  //       setData(response.data);  // Set the fetched data to state
+  //       setFilteredData(response.data);  // Set filtered data to all fetched data initially
+  //       setMessage('');
+  //     } else {
+  //       setMessage('Patient not found');
+  //     }
+  //   } catch (error) {
+  //     console.error('Error fetching patient data:', error);
+  //     setMessage('Error fetching patient data');
+  //   }
+  // };
+  
+  // // Fetch data when the patientId changes
+  // useEffect(() => {
+  //   if (patientId) {
+  //     fetchPatientDataById();
+  //   }
+  // }, [patientId]);
+  
+
   const filterData = () => {
+    console.log('Data before filtering:', data);  // Log the original data
+  
     const filtered = data.filter((item) => {
       const itemDate = item.patient_date ? new Date(item.patient_date) : null;
+  
+      console.log('Item date:', itemDate, 'Valid:', !isNaN(itemDate));
+  
       const isWithinDateRange =
         (!startDate || (itemDate && itemDate >= startDate)) &&
         (!endDate || (itemDate && itemDate <= endDate));
-      const matchesDoctor = !searchTermDoctor || item.doctor_name.toLowerCase().includes(searchTermDoctor.toLowerCase());
-      const matchesMedical = !searchTermMedical || item.medical.toLowerCase().includes(searchTermMedical.toLowerCase());
-
+  
+      const matchesDoctor =
+        !searchTermDoctor || item.doctor_name.toLowerCase().includes(searchTermDoctor.toLowerCase());
+      const matchesMedical =
+        !searchTermMedical || item.medical.toLowerCase().includes(searchTermMedical.toLowerCase());
+  
+      console.log('isWithinDateRange:', isWithinDateRange);
+      console.log('matchesDoctor:', matchesDoctor);
+      console.log('matchesMedical:', matchesMedical);
+  
       return isWithinDateRange && matchesDoctor && matchesMedical;
     });
-
+  
+    console.log('Filtered data:', filtered);  // Log filtered data
+  
     if (filtered.length > 0) {
       setFilteredData(filtered);
       setMessage('');
@@ -69,7 +108,7 @@ const Patient_data_view = ({ handlePageChange, patientName }) => {
       setMessage('No data present in this range');
     }
   };
-
+  
   // Trigger the filtering when search terms change
   useEffect(() => {
     filterData(); // Automatically filter when searchTermDoctor or searchTermMedical changes

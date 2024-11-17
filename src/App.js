@@ -46,7 +46,7 @@ function App() {
       {pageName === 'Update' && <Update patientData={patientDetails}  handlePageChange={handlePageChange}/>}
 
       {pageName === 'Homepage' && <Homepage handlePageChange={handlePageChange} setPatientName={setPatientName} setDoctorName={setDoctorName} email={email} />} {/* Pass email */}
-      {pageName === 'Patient_data_view' && <Patient_data_view handlePageChange={handlePageChange} patientName={patientName} />}
+      {pageName === 'Patient_data_view' && <Patient_data_view handlePageChange={handlePageChange} patientName={patientName} patientId={patientID} />}
       {pageName === 'Doctor_homepage' && <Doctor_homepage handlePageChange={handlePageChange} doctorName={doctorName} />}
       {pageName === 'Error' && <Error handlePageChange={handlePageChange} />}
     </Router>
