@@ -121,62 +121,18 @@
 
    
 }
-.btn btn-primary{
-    
-    margin-left: 150px;
-    background-color: aquamarine;
-}
-
-
-.custom-modal .modal-content {
-    background-color:aliceblue;
-    padding: 20px;
-    border-radius: 8px;
-    max-width: 500px;
-    margin: auto;
+.modal-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 30px;
+    background-color: #ffffff;
+    border-radius: 10px;
+    width: 400px;
+    margin: 0 auto;
     text-align: center;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    animation: slide-down 0.3s ease-out;
-}
-
-.custom-modal .success-message {
-    font-size: 1.2rem;
-    margin-bottom: 20px;
-    
-}
-
-.custom-modal .ok-button {
-    background-color:gray;
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 1rem;
-    transition: background-color 0.3s ease;
-}
-
-
-
-.ok-button {
-    
-    color: white;
-    padding: 10px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 1em;
-    width: 80px;
-    margin-left: 150px;
-}
-
-.ok-button:hover {
-    background-color:darkolivegreen;
-}
-
-
-
-
+  }
 .basic-multi-select {
     width: 100%;
 }
@@ -187,7 +143,4 @@
 
 .select__menu {
     z-index: 100;
-}
-.btn btn-primary mb-3{
-    background-color: red;
 }

@@ -17,10 +17,18 @@ function App() {
   const [email, setEmail] = useState('');  
   const [patientName, setPatientName] = useState('');
   const [doctorName, setDoctorName] = useState('');
+  const [patientDetails, setPatientDetails] = useState(null);
+  const[patientID,setPatientID] =useState('');
 
-  const handlePageChange = (newPageName) => {
-    setPageName(newPageName); 
+
+  const handlePageChange = (newPageName, patientData = null) => {
+    setPageName(newPageName);
+    if (patientData) {
+      setPatientID(patientData.patient_id);  
+      setPatientDetails(patientData);  
+    }
   };
+  
 
   return (
     <Router>
@@ -34,7 +42,9 @@ function App() {
       {pageName === 'Signup' && <Signup handlePageChange={handlePageChange} />}
       {pageName === 'Read' && <Read handlePageChange={handlePageChange} />}
       {pageName === 'Create' && <Create handlePageChange={handlePageChange} />}
-      {pageName === 'Update' && <Update handlePageChange={handlePageChange} />}
+      {/* {pageName === 'Update' && <Update handlePageChange={handlePageChange} setPatientID= {setPatientID} />} */}
+      {pageName === 'Update' && <Update patientData={patientDetails}  handlePageChange={handlePageChange}/>}
+
       {pageName === 'Homepage' && <Homepage handlePageChange={handlePageChange} setPatientName={setPatientName} setDoctorName={setDoctorName} email={email} />} {/* Pass email */}
       {pageName === 'Patient_data_view' && <Patient_data_view handlePageChange={handlePageChange} patientName={patientName} />}
       {pageName === 'Doctor_homepage' && <Doctor_homepage handlePageChange={handlePageChange} doctorName={doctorName} />}

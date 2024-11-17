@@ -111,14 +111,29 @@
   margin-top: -20px;
 }
 
-.modalContent {
+/* .modalContent {
   width: 500px; 
   background-color: white; 
   padding: 20px; 
   border-radius: 8px;
   position: relative; 
   text-align: center; 
+} */
+
+.deleteConfirmModal {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 10px;
+
+  width: 400px;
+  margin: 0 auto;
+  text-align: center;
 }
+
 
 .footer{
   background-color: rgba(0, 0, 0, 0.137);
@@ -140,4 +155,14 @@
 .searchInputs
 {
   gap:20px;
+}
+.deleteConfirmModal button {
+  width: 70px;
+  padding: 8px;
+  font-size: 14px;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  height: 50px;
+  gap: 5px;
 }

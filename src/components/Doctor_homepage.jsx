@@ -17,7 +17,7 @@ import {
   defaultDatePickerStrings,
 } from '@fluentui/react';
 
-const Doctor_homepage = ({ handlePageChange, doctorName }) => {
+const Doctor_homepage = ({ handlePageChange, doctorName}) => {
   const [data, setData] = useState([]);
   const [searchName, setSearchName] = useState('');  // For patient name
   const [searchId, setSearchId] = useState('');      // For patient ID
@@ -30,6 +30,8 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
   const [startDate, setStartDate] = useState(null); // To store start date
   const [endDate, setEndDate] = useState(null); // To store end date
   const [filteredDataState, setFilteredDataState] = useState([]);
+  const [patientDetails, setPatientDetails] = useState(null);
+
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -145,18 +147,12 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
     handlePageChange('Homepage');
   };
 
+
   const goToUpdate = (item) => {
-    localStorage.setItem('ID', item.id);
-    localStorage.setItem('Name', item.patient_name);
-    localStorage.setItem('PatientID', item.patient_id);
-    localStorage.setItem('Email', item.patient_email);
-    localStorage.setItem('Date', item.patient_date);
-    localStorage.setItem('Age', item.age);
-    localStorage.setItem('Gender', item.gender);
-    localStorage.setItem('Medical', item.medical);
-    localStorage.setItem('Description', item.description);
-    handlePageChange('Update');
+    handlePageChange('Update', item);  // Pass the entire patient item to the next page
   };
+
+ 
 
   const formatDate = (dateString) => {
     const date = new Date(dateString);
@@ -297,9 +293,14 @@ const Doctor_homepage = ({ handlePageChange, doctorName }) => {
         isBlocking={false}
       >
         <div className={styles.deleteConfirmModal}>
+          <CloseIcon   onClick={cancelDeleteConfirmation} style={{marginLeft:"360px", marginTop:"-15px", cursor:"pointer"}}></CloseIcon>
           <h4>Are you sure you want to delete this record?</h4>
-          <button onClick={handleDeleteConfirmation} className="btn btn-danger">Yes</button>
-          <button onClick={cancelDeleteConfirmation} className="btn btn-secondary">No</button>
+          <br></br>
+          <div className={styles.modalButtons}>
+          <button onClick={handleDeleteConfirmation} className="btn btn-secondary">Yes</button>
+          <button onClick={cancelDeleteConfirmation} className="btn btn-secondary" style={{marginLeft:"10px"}}>No</button>
+          </div>
+          
         </div>
       </Modal>
     </div>

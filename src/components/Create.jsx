@@ -4,7 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { Modal } from '@fluentui/react/lib/Modal';
 import CloseIcon from '@mui/icons-material/Close';
 import { Label } from '@fluentui/react/lib/Label';
-
+import DoneIcon from '@mui/icons-material/Done';
 import '../assets/Create.css';
 import { initializeIcons } from '@fluentui/font-icons-mdl2';
 
@@ -326,9 +326,10 @@ const Create = ({ handlePageChange }) => {
 
                 <Modal isOpen={isModalOpen} onDismiss={closeModal}>
                     <div className="modal-content">
-                        <h3>Success!</h3>
-                        <p>Data successfully added.</p>
-                        <button onClick={closeModal} className="btn btn-primary">OK</button>
+                        <h2>Success!</h2>
+                        <h3>Data successfully added.</h3>
+                        <button onClick={closeModal} className="btn btn-primary" style={{backgroundColor:"green"}}><DoneIcon></DoneIcon></button>
+                        {/* <button onClick={closeModal} className="btn btn-primary">OK</button> */}
                     </div>
                 </Modal>
             </div>
