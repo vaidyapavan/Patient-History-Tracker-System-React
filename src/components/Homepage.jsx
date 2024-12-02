@@ -6,6 +6,7 @@ import CloseIcon from '@mui/icons-material/Close';
 import AccountBoxIcon from '@mui/icons-material/AccountBox';
 import '../assets/Homepage.css';
 
+
 const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) => {
   const [isPatientConfirmModal, setIsPatientConfirmModal] = useState(false);
   const [isDoctorConfirmModal, setIsDoctorConfirmModal] = useState(false);

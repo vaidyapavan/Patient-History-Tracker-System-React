@@ -133,7 +133,7 @@ const Patient_data_view = ({ handlePageChange, patientName, patientId }) => {
 
         <div className={styles.profile}>
           <div className={styles.profileInfo}>
-            <AccountBoxIcon style={{ fontSize: '100px', marginTop: '-100px' }} />
+            <AccountBoxIcon style={{ fontSize: '100px', marginTop: '-100px'}} />
             <h5 className={styles.patientName}>{patientName}</h5>
           </div>
         </div>

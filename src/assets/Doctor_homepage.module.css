@@ -1,5 +1,5 @@
 .container {
-  margin: 20px;
+  margin: 10px;
   background-color: #f2f2f2;
   
 }
@@ -44,7 +44,7 @@
 }
 
 .tableWrapper {
-  max-height: 400px; /* Set maximum height for the table */
+  max-height: 430px; /* Set maximum height for the table */
   overflow-y: auto;  /* Enable vertical scrolling */
   margin-top: 20px;  /* Add some space above the table */
 }
@@ -111,14 +111,7 @@
   margin-top: -20px;
 }
 
-/* .modalContent {
-  width: 500px; 
-  background-color: white; 
-  padding: 20px; 
-  border-radius: 8px;
-  position: relative; 
-  text-align: center; 
-} */
+
 
 .deleteConfirmModal {
   display: flex;

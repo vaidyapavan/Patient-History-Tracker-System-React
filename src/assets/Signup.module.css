@@ -135,6 +135,9 @@
 
   max-height: 80vh; /* Set a maximum height */
   overflow-y: auto;  /* Enable vertical scrolling */
+  
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Optional shadow for better visibility */
+  position: relative; /* Ensure modal is properly positioned */
 }
 
 /* Modal Content */
@@ -151,6 +154,7 @@
   color: #4CAF50;
   margin-bottom: 10px;
 }
+
 
 /* Paragraph Styling */
 .modalContent p {

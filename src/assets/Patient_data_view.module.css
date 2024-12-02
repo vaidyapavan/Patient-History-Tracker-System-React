@@ -1,6 +1,8 @@
 .container {
   margin-top:px;   
   background-color: #f2f2f2;
+  margin: 10px;
+  
   
 }
 
@@ -11,11 +13,12 @@
 
 .profileInfo {
   margin-bottom: 10px; 
-  margin-left: 1500px;
+  margin-left: 1400px;
 }
 
 .patientName {
-  font-size: 24px; /* Adjust patient name font size */
+  font-size: 24px; 
+  
 }
 
 .filterSection {
@@ -39,9 +42,13 @@
 
 /* Adding scrollable table CSS */
 .tableWrapper {
-  max-height: 400px; 
+  margin: 20px;
+justify-content: center;
+ height: 360px;
+  max-height: 430px; 
   overflow-y: auto;  
   margin-top: 20px;  
+  
 }
 
 .table {
@@ -51,15 +58,18 @@
 
 .table th {
   padding: 10px;
-  position: sticky; 
-  top: 0; 
-  z-index: 10; 
+  position: sticky; /* Fix the header at the top */
+  top: 0; /* Stick the header at the top */
+  background-color: #fff; /* Background for the header to distinguish it */
+  z-index: 10; /* Ensure header stays above the scrollable content */
+  border-bottom: 1px solid #ddd; /* Add border for better visibility */
 
 }
 
 .table td {
   padding: 10px;
   text-align: left;
+  border-bottom: 1px solid #ddd; 
   
 }
 

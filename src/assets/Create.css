@@ -4,7 +4,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #f2f2f2;    
+    background-color: #f2f2f2;
+    width: 100vw; /* Full viewport width */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
 
 .form-container {
@@ -12,10 +14,12 @@
     padding: 20px;
     border-radius: 8px;
     box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    width: 950px;
-    max-height: 100vh;  /* Set a max height to make it scrollable */
+    width: 700px; /* Fixed width */
+    max-height: 100vh;  /* Set a max height to make it scrollable vertically */
     overflow-y: auto;  /* Enable vertical scrolling */
+    overflow-x: hidden; /* Prevent horizontal scrolling */
 }
+
 
 
 .form-title {
@@ -43,7 +47,7 @@
 }
 
 .form-select {
-    width: 100%;
+    /* width: 100%; */
     padding: 8px;
     font-size: 16px;
     border: 1px solid #ccc;
