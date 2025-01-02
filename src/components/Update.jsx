@@ -149,7 +149,7 @@ const Update = ({ patientData, handlePageChange }) => {
     return (
         <div className="create-container">
             <div className="form-container">
-                <CloseIcon onClick={cancelForm} className="close-icon" style={{ marginLeft: "90px", marginTop: "-20px", marginRight: "-30px", cursor: "pointer" }} />
+                <CloseIcon onClick={cancelForm} className="close-icon" style={{ marginLeft: "630px", marginTop: "-20px", marginRight: "-30px", cursor: "pointer" }} />
                 <h2 className="form-title">Update Patient Data</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">
@@ -304,7 +304,7 @@ const Update = ({ patientData, handlePageChange }) => {
                             </div>
                         )}
                     </div>
-                    <button type="button" className="btn btn-primary" onClick={cancelForm} style={{marginLeft:"300px"}}>Cancel</button>
+                    <button type="button" className="btn btn-primary" onClick={cancelForm} style={{marginLeft:"200px"}}>Cancel</button>
                     <button type="submit" className="btn btn-primary">Save Changes</button>
                
                 </form>

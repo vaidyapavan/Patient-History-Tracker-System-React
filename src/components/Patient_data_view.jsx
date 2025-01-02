@@ -41,7 +41,7 @@ const Patient_data_view = ({ handlePageChange, patientName, patientId }) => {
     }
   };
   
-  // Fetch data when the patientName changes
+ // Fetch data when the patientName changes
   useEffect(() => {
     if (patientName) {
       fetchPatientDataByName();
@@ -49,29 +49,36 @@ const Patient_data_view = ({ handlePageChange, patientName, patientId }) => {
   }, [patientName]);
 
 
-  // // Fetch patient data by ID
-  // const fetchPatientDataById = async () => {
-  //   try {
-  //     const response = await axios.get(`http://localhost:8086/getPatientDataById/${patientId}`);
-  //     if (response.status === 200) {
-  //       setData(response.data);  // Set the fetched data to state
-  //       setFilteredData(response.data);  // Set filtered data to all fetched data initially
-  //       setMessage('');
-  //     } else {
-  //       setMessage('Patient not found');
-  //     }
-  //   } catch (error) {
-  //     console.error('Error fetching patient data:', error);
-  //     setMessage('Error fetching patient data');
-  //   }
-  // };
-  
-  // // Fetch data when the patientId changes
-  // useEffect(() => {
-  //   if (patientId) {
-  //     fetchPatientDataById();
-  //   }
-  // }, [patientId]);
+
+
+  // Fetch patient data by ID
+// const fetchPatientDataById = async () => {
+//   try {
+//     const response = await axios.get(`http://localhost:8086/getPatientDataById/${patientId}`);
+//     if (response.status === 200) {
+//       setData(response.data);  // Set the fetched data to state
+//       setFilteredData(response.data);  // Set filtered data to all fetched data initially
+//       setMessage('');  // Clear any previous error message
+//     } else {
+//       setMessage('Patient not found');
+//     }
+//   } catch (error) {
+//     if (error.response && error.response.status === 404) {
+//       setMessage('Patient not found');
+//     } else {
+//       console.error('Error fetching patient data:', error);
+//       setMessage('Error fetching patient data');
+//     }
+//   }
+// };
+
+// // Fetch data when the patientId changes
+// useEffect(() => {
+//   if (patientId) {
+//     fetchPatientDataById();
+//   }
+// }, [patientId]);
+
   
 
   const filterData = () => {

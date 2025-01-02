@@ -158,7 +158,7 @@ const Create = ({ handlePageChange }) => {
     return (
         <div className="create-container">
             <div className="form-container">
-                <CloseIcon onClick={cancelForm} className="close-icon" style={{ marginLeft: "890px", marginTop: "-20px", marginRight: "-30px", cursor: "pointer" }} />
+                <CloseIcon onClick={cancelForm} className="close-icon" style={{ marginLeft: "630px", marginTop: "-20px", marginRight: "-30px", cursor: "pointer" }} />
                 <h2 className="form-title">Add Patient Data</h2>
                 <form onSubmit={handleSubmit}>
                     <div className="mb-3">

@@ -18,14 +18,14 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
 
   const closePatientSaveModal = () => {
     const values = {
-      name: patientName,
-      userId: patientUniqueId
+      patient_name: patientName,  // Use patient_name to match backend
+      patient_id: patientUniqueId // Use patient_id to match backend
     };
-
+  
     axios.post('http://localhost:8086/verify', values)
       .then(res => {
-        if (res.data === "Success") {
-          setPatientName(patientName); // Set the patient name in the parent component
+        if (res.data === "Success") {  // Check for "Success" directly
+          setPatientName(values.patient_name); // Set patient name in parent component
           handlePageChange('Patient_data_view');
         } else {
           setError('Invalid Name or User ID');
@@ -36,6 +36,7 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
         console.error(err);
       });
   };
+  
 
   const closeDoctorSaveModal = () => {
     const values = {
@@ -44,7 +45,7 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
     };
 
     axios.post('http://localhost:8086/verify_Doctor', values)
-    .then(res => {
+      .then(res => {
         if (res.data === "Success") {
           setDoctorName(doctorName);
           handlePageChange('Doctor_homepage');
@@ -81,7 +82,7 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
       <div className='homecontainer'>
         <div className="navbar">
           <div className="navbar-content">
-            <div className="navbar-item"> <div className='logo' style={{marginTop:"-70px"}}>
+            <div className="navbar-item"> <div className='logo' style={{ marginTop: "-70px" }}>
 
             </div>
             </div>
