@@ -21,20 +21,20 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
       patient_name: patientName,  // Use patient_name to match backend
       patient_id: patientUniqueId // Use patient_id to match backend
     };
-  
     axios.post('http://localhost:8086/verify', values)
-      .then(res => {
-        if (res.data === "Success") {  // Check for "Success" directly
-          setPatientName(values.patient_name); // Set patient name in parent component
-          handlePageChange('Patient_data_view');
-        } else {
-          setError('Invalid Name or User ID');
-        }
-      })
-      .catch(err => {
-        setError('An error occurred. Please try again.');
-        console.error(err);
-      });
+    .then(res => {
+      if (res.data.message === "Success") {  // Check for "Success" message
+        setPatientName(values.patient_name); // Set patient name in parent component
+        handlePageChange('Patient_data_view'); // Redirect to Patient Data View page
+      } else {
+        setError('Invalid User ID'); // Display error if "Fail"
+      }
+    })
+    .catch(err => {
+      setError('An error occurred. Please try again.');
+      console.error(err);
+    });
+  
   };
   
 
