@@ -90,7 +90,7 @@ const Signup = ({ handlePageChange }) => {
       const userId = shortid.generate(); 
       const userData = { ...values, userId }; // Include the ID in the data
   
-      axios.post('http://localhost:8086/signup', userData)
+      axios.post('http://localhost:8087/signup', userData)
         .then(res => {
           setUserId(userId); // Store the generated user ID in the state
           setIsModalOpen(true); // Show success modal

@@ -21,7 +21,7 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
       patient_name: patientName,  // Use patient_name to match backend
       patient_id: patientUniqueId // Use patient_id to match backend
     };
-    axios.post('http://localhost:8086/verify', values)
+    axios.post('http://localhost:8087/verify', values)
     .then(res => {
       if (res.data.message === "Success") {  // Check for "Success" message
         setPatientName(values.patient_name); // Set patient name in parent component
@@ -44,7 +44,7 @@ const Homepage = ({ handlePageChange, setPatientName, setDoctorName, email }) =>
       userId: doctorUniqueId
     };
 
-    axios.post('http://localhost:8086/verify_Doctor', values)
+    axios.post('http://localhost:8087/verify_Doctor', values)
       .then(res => {
         if (res.data === "Success") {
           setDoctorName(doctorName);

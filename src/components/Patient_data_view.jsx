@@ -27,7 +27,7 @@ const Patient_data_view = ({ handlePageChange, patientName, patientId }) => {
   const fetchPatientDataByName = async () => {
     try {
       const encodedName = encodeURIComponent(patientName); // Encode the patient name
-      const response = await axios.get(`http://localhost:8086/getPatientData/${encodedName}`);
+      const response = await axios.get(`http://localhost:8087/getPatientData/${encodedName}`);
       if (response.status === 200) {
         setData(response.data); // Set the fetched data to state
         setFilteredData(response.data); // Initially set filteredData to all data
@@ -54,7 +54,7 @@ const Patient_data_view = ({ handlePageChange, patientName, patientId }) => {
   // Fetch patient data by ID
 // const fetchPatientDataById = async () => {
 //   try {
-//     const response = await axios.get(`http://localhost:8086/getPatientDataById/${patientId}`);
+//     const response = await axios.get(`http://localhost:8087/getPatientDataById/${patientId}`);
 //     if (response.status === 200) {
 //       setData(response.data);  // Set the fetched data to state
 //       setFilteredData(response.data);  // Set filtered data to all fetched data initially

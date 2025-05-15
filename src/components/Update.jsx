@@ -64,7 +64,7 @@ const Update = ({ patientData, handlePageChange }) => {
         }
 
         try {
-            const response = await axios.put(`http://localhost:8086/patients/${patientID}`, {
+            const response = await axios.put(`http://localhost:8087/patients/${patientID}`, {
                 patient_name: patientName,
                 patient_id: patientID,
                 patient_email: patientEmail,

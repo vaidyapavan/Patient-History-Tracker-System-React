@@ -30,7 +30,7 @@ const Read = ({handlePageChange} ) => {
 
   const getData = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/getData'); 
+      const response = await axios.get('http://localhost:8087/getData'); 
       setData(response.data); // Update state with fetched data
       console.log('Data fetched successfully:', response.data); // Log fetched data to console
     } catch (error) {

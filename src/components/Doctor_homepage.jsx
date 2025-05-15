@@ -40,7 +40,7 @@ const Doctor_homepage = ({ handlePageChange, doctorName}) => {
 
   const getData = async () => {
     try {
-      const response = await axios.get('http://localhost:8086/patientDataForDoctor');
+      const response = await axios.get('http://localhost:8087/patientDataForDoctor');
       const formattedData = response.data.map(item => ({
         ...item,
         medical: item.medical || 'No Medical Data Available',
@@ -69,7 +69,7 @@ const Doctor_homepage = ({ handlePageChange, doctorName}) => {
 
   const handleDelete = async (id) => {
     try {
-      await axios.delete(`http://localhost:8086/deleteData/${id}`);
+      await axios.delete(`http://localhost:8087/deleteData/${id}`);
       getData(); // Refresh data after deletion
       setIsDeleteConfirmModal(false);
     } catch (error) {

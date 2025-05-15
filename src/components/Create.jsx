@@ -53,7 +53,7 @@ const Create = ({ handlePageChange }) => {
         }
 
         try {
-            const response = await axios.post('http://localhost:8086/create', {
+            const response = await axios.post('http://localhost:8087/create', {
                 patient_name: patientName,
                 patient_id: patientID, // Sending the patientID to the backend
                 patient_email: patientEmail,

@@ -46,7 +46,7 @@ const Login = ({ handlePageChange, setEmail }) => {
       return;
     }
 
-    axios.post('http://localhost:8086/login', values)
+    axios.post('http://localhost:8087/login', values)
       .then(res => {
         if (res.data === "Success") {
           setEmail(values.email); // Store email for global use
